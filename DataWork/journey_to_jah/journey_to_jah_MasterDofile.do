@@ -78,21 +78,31 @@
 
    * Root folder globals
    * ---------------------
+    if c(username) == 	"michaelorevba"   {
+		global dropbox	"/Users/michaelorevba/Dropbox/Jah Referencing"
+		global dropbox	"/Users/michaelorevba/GitHub/Jah-referencing"
+	}
+   	if c(username) == 	"WB527265" 		  {
+		global dropbox 	"C:/Users/WB527265/Dropbox/Jah Referencing"
+		global github	"C:/Users/WB527265/Documents/GitHub/Jah-referencing"
+	}
+	if c(username) == 	"ruzzante.matteo" {
+		global dropbox	"C:/Users/ruzzante.matteo/Dropbox/Jah Referencing"
+		global github	"C:/Users/ruzzante.matteo/Documents/GitHub/Jah-referencing"
+	}
+	if c(username) ==	"jonasguthoff" 	  {
+		global dropbox  "/Users/jonasguthoff/Dropbox/Jah Referencing"
+		global github	"/Users/jonasguthoff/GitHub/Jah-referencing"
+	}
 
-   if $user == 1 {
-       global projectfolder "C:\Users\ruzzante.matteo\Dropbox\Jah Referencing"
-   }
-
-   if $user == 2 {
-       global projectfolder ""  // Enter the file path to the project folder for the next user here
-   }
-
+   
+   
 * These lines are used to test that the name is not already used (do not edit manually)
 
    * Project folder globals
    * ---------------------
 
-   global dataWorkFolder         "$projectfolder/DataWork"
+   global dataWorkFolder         "$dropbox/DataWork"
 
 *iefolder*1*FolderGlobals*master************************************************
 *iefolder will not work properly if the line above is edited
