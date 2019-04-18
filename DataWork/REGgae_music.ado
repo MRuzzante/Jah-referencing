@@ -20,18 +20,15 @@ cap prog drop REGgae_music
 		
 	if   "`playlist'" != "" {
 		
-		* Error for playlist and number incorrectly used together
-		if "`number'" != "" {
+		// Error for playlist and other option incorrectly used together
 		
-			noi di as error "Option {bf:number} may not be used in combination with option {bf:playlist}."
-					  error  197
-		}
-		
-		* Error for playlist and artist incorrectly used together
-		if	 "`artist'" != "" {	
+		foreach optionName number artist country gender {
+	
+			if "``optionName''" != "" {
 			
-			noi di as error "Option {bf:artist} may not be used in combination with option {bf:playlist}."
-					  error  197
+				noi di as error "Option {bf:`optionName'} may not be used in combination with option {bf:playlist}."
+						  error  197
+			}
 		}
 	}
 	
@@ -45,12 +42,22 @@ cap prog drop REGgae_music
 		exit
 	}
 	
+	// Error for artist, country and/or gender option incorrectly used together
+	if   "`artist'" != "" {
+	
+		if "`country'" != "" {
+			
+				noi di as error "Option {bf:country} may not be used in combination with option {bf:artist}."
+						  error  197
+		}
+	}
+		
 	// If 'number' option is not used, we display one song
 	if 	  "`number'"   == "" local number = 1
 	
 	// If 'artist' option is used, check that artist exist in our list
 	local  artistList `" "Chronixx""Protoje" "Alborosie" "Gentleman" "Bob Marley" "Etana" "Junior Kelly" "Anthony B" "Kabaka Pyramid" "Sara Lugo" "'
-		
+	
 	if	 "`artist'"	   != "" {
 	
 		if   "`artist'"    != "Chronixx"   		& ///
@@ -107,6 +114,40 @@ cap prog drop REGgae_music
 		local SaraLugo    	= 1
 	}
 	
+	//Do the same process for countries
+	local countryList Jamaica Italy Germany 
+	
+	if	 "`country'"	   != "" {
+		
+		if   "`country'"   != "Jamaica" & ///
+			 "`country'"   != "Italy"   & ///
+			 "`country'"   != "Germany" & {
+				
+				 noi di as error "The {bf:country} you selected is not present in our playlist."
+				 noi di as error "If you like any reggae artist from there, feel free to suggest it by opening an issue in:""
+				 noi di as error `" {browse "https://github.com/MRuzzante/Jah-referencing/issues":https://github.com/MRuzzante/Jah-referencing/issues}
+						   exit
+		}
+	}
+	
+	if	 "`country'"	   != "" {
+	
+		foreach countryName of local countryList {
+			
+											  local `countryName' = 0
+			if "`country'" == "`countryName'" local `countryName' = 1
+		}
+	}
+	
+	if	  "`country'"	   == "" {
+	
+		foreach countryName of local countryList {
+		
+			local `countryName' = 1
+		}
+	}
+	
+	
 	// Initialize song counter
 	local  totalSong  = 26
 	local  songCount  =  0
@@ -128,7 +169,7 @@ cap prog drop REGgae_music
 
 		// "Who Knows"
 		if `randomSong' <= `rangeMax' {
-			if `Chronixx' == 1 | `Protoje' == 1 {
+			if (`Chronixx' == 1 | `Protoje' == 1) & `Jamaica' == 1 {
 				
 				di  		""
 				di as txt  `""I'm pleased to be chilling in the West Indies.""'
@@ -144,7 +185,7 @@ cap prog drop REGgae_music
 		
 		// "Skankin' Sweet"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Chronixx' {
+			if `Chronixx' & `Jamaica' {
 				
 				di  		""
 				di as txt  `""Skankin' sweet"'
@@ -161,7 +202,7 @@ cap prog drop REGgae_music
 		
 		// "Smile Jamaica"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Chronixx' {
+			if `Chronixx' & `Jamaica' {
 				
 				di  		""
 				di as txt  `""Smile girl smile"'
@@ -178,7 +219,7 @@ cap prog drop REGgae_music
 		
 		// "Here Comes Trouble"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Chronixx' {
+			if `Chronixx' & `Jamaica' {
 				
 				di  		""
 				di as txt  `""Welcome the savior"'
@@ -195,7 +236,7 @@ cap prog drop REGgae_music
 		
 		// "Living Dread"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Alborosie' {
+			if `Alborosie' & `Italy' {
 				
 				di  		""
 				di as txt  `""I and I are the living dread"'
@@ -212,7 +253,7 @@ cap prog drop REGgae_music
 		
 		// "Kingston Town"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Alborosie' {
+			if `Alborosie' & `Italy' {
 			
 				di  		""
 				di as txt  `""Sipple it down down, sipple it down down."'
@@ -229,7 +270,7 @@ cap prog drop REGgae_music
 		
 		// "Journey to Jah"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Alborosie' == 1 | `Gentleman' == 1 {
+			if (`Alborosie' == 1 | `Gentleman' == 1) & (`Italy' == 1 | `Germany' == 1) {
 				
 				di  		""
 				di as txt  `""Crossing border, divine is the order.""'
@@ -245,7 +286,7 @@ cap prog drop REGgae_music
 		
 		// "Still Blazing"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Alborosie' {
+			if `Alborosie' & `Italy' {
 				
 				di  		""
 				di as txt  `""Don't let nobody rule your soul, no way.""'
@@ -261,7 +302,7 @@ cap prog drop REGgae_music
 
 		// "No Cocaine"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Alborosie' {
+			if `Alborosie' & `Italy' {
 				
 				di  		""
 				di as txt  `""No coca, no coca, no coca inna mi brain""'
@@ -278,7 +319,7 @@ cap prog drop REGgae_music
 		
 		// "Herbalist"
         if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Alborosie' {
+			if `Alborosie' & `Italy' {
 			
 				di  		""
 				di as txt  `""Babylon dem thief my herb dem thief my herb.""'
@@ -294,7 +335,7 @@ cap prog drop REGgae_music
 		
 		// "Contradiction"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Alborosie' == 1 | `Chronixx' == 1 {	
+			if (`Alborosie' == 1 | `Chronixx' == 1) & (`Italy' == 1 | `Jamaica' == 1) {	
 				
 				di  		""
 				di as txt  `""Contradiction global"'
@@ -311,7 +352,7 @@ cap prog drop REGgae_music
 		
 		// "Intoxication"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Gentleman' {
+			if `Gentleman' & `Germany' {
 				
 				di  		""
 				di as txt  `""Joy ina your eyes me nuh see no tears"'
@@ -328,7 +369,7 @@ cap prog drop REGgae_music
 
 		// "Red Town"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Gentleman' {
+			if `Gentleman' & `Germany' {
 			
 				di  		""
 				di as txt  `""The destination is freedom from stress"'
@@ -345,7 +386,7 @@ cap prog drop REGgae_music
 		
 		// "Redemption Song"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `BobMarley' {
+			if `BobMarley' & `Jamaica' {
 			
 				di  		""
 				di as txt  `""Emancipate yourselves from mental slavery"'
@@ -362,7 +403,7 @@ cap prog drop REGgae_music
 		
 		// "One Love"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `BobMarley' {
+			if `BobMarley' & `Jamaica' {
 			
 				di  		""
 				di as txt  `""Let's get together and feel all right.""'
@@ -378,7 +419,7 @@ cap prog drop REGgae_music
 		
 		// "Iron Lion Zion"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `BobMarley' {
+			if `BobMarley' & `Jamaica' {
 				
 				di  		""
 				di as txt  `""I had to run like a fugitive just to save the life I live"'
@@ -395,7 +436,7 @@ cap prog drop REGgae_music
 				
 		// "Unbalance"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `AnthonyB' {
+			if `AnthonyB' & `Jamaica' {
 				
 				di  		""
 				di as txt  `""Unbalance"'
@@ -412,7 +453,7 @@ cap prog drop REGgae_music
 					
 		// "If Love So Nice"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `JuniorKelly' {
+			if `JuniorKelly' & `Jamaica' {
 				
 				di  		""
 				di as txt  `""Tell me if love so nice.""'
@@ -428,7 +469,7 @@ cap prog drop REGgae_music
 		
 		// "I Am Not Afraid"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `Etana' {
+			if `Etana' & `Jamaica' {
 				
 				di  		""
 				di as txt  `""If dem a come let them come 'cause I am protected by the most one.""'
@@ -444,7 +485,7 @@ cap prog drop REGgae_music
 		
 		// "Good Cop Bad Cop"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `AnthonyB' {
+			if `AnthonyB' & `Jamaica' {
 				
 				di  		""
 				di as txt  `""Tell me if love so nice.""'
@@ -460,7 +501,7 @@ cap prog drop REGgae_music
 		
 		// "Make Way"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `KabakaPyramid' {
+			if `KabakaPyramid' & `Jamaica' {
 				
 				di  		""
 				di as txt  `""Mi go say"'
@@ -478,7 +519,7 @@ cap prog drop REGgae_music
 
 		// "Can't Breathe"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `KabakaPyramid' {
+			if `KabakaPyramid' & `Jamaica' {
 				
 				di  		""
 				di as txt  `""Me say me cyaan breathe"'
@@ -496,7 +537,7 @@ cap prog drop REGgae_music
 		
 		// "Reggae Music"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `KabakaPyramid' {
+			if `KabakaPyramid' & `Jamaica' {
 			
 				di  		""
 				di as txt  `""Well, if the music sounds sweet and the people dem a dance"'
@@ -513,7 +554,7 @@ cap prog drop REGgae_music
 		
 		// "Well Done"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `KabakaPyramid' {
+			if `KabakaPyramid' & `Jamaica' {
 			
 				di  		""
 				di as txt  `""Well done, well done, Mr. Politician Man"'
@@ -530,7 +571,7 @@ cap prog drop REGgae_music
 		
 		// "High & Windy"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `KabakaPyramid' == 1 | `SaraLugo' == 1 {
+			if (`KabakaPyramid' == 1 | `SaraLugo' == 1) & (`Jamaica' == 1 | `Germany' == 1) {
 			
 				di  		""
 				di as txt  `""Riding on a high and windy day"'
@@ -547,7 +588,7 @@ cap prog drop REGgae_music
 		
 		// "I Really Like You"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `SaraLugo' == 1 | `Protoje' == 1 {
+			if (`SaraLugo' == 1 | `Protoje' == 1) & (`Jamaica' == 1 | `Germany' == 1) {
 				
 				di  		""
 				di as txt  `""Cos I really really like you"'
