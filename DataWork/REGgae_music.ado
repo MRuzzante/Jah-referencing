@@ -32,6 +32,40 @@ cap prog drop REGgae_music
 		}
 	}
 	
+	// If 'platform' option is used, check that it exists in our package
+	if "`platform'" != "" {
+	
+		if "`platform'" != "Youtube" &  "`platform'" != "Spotify" {
+			
+			noi di as error "The {bf:platform} you selected is not available in our package."
+			noi di as error "Feel free to suggest it by opening an issue in:""
+			noi di as error `" {browse "https://github.com/MRuzzante/Jah-referencing/issues":https://github.com/MRuzzante/Jah-referencing/issues}
+					  exit
+		}
+	}	
+	
+	// If 'playlist' option is selected, we display the link to the Youtube playlist and exit the program
+	if  "`playlist'" != "" {
+		
+		if "`platform'" == "Youtube" {
+			
+			di as txt   "Enjoy the reggae playlist for rasta Stata users in Youtube."
+			di as txt   "Blessing!"
+			di		    ""
+			di as text `"  {browse "https://www.youtube.com/watch?v=hzqFmXZ8tOE&list=PLC-aST3UH2m5tfv3RALnUA-z753ZDYSm7":https://www.youtube.com/watch?v=hzqFmXZ8tOE&list=PLC-aST3UH2m5tfv3RALnUA-z753ZDYSm7}
+			exit
+		}
+		
+		if "`platform'" == "Spotify" {
+			
+			di as txt   "Enjoy the reggae playlist for rasta Stata users in Spotify."
+			di as txt   "Blessing!"
+			di		    ""
+			di as text `"  {browse "https://open.spotify.com/user/ruzzante.matteo/playlist/100XebrUHtUthBEoaKo0Ge?si=d592jMbFRl2EDf9w0QlPLA":https://open.spotify.com/user/ruzzante.matteo/playlist/100XebrUHtUthBEoaKo0Ge?si=d592jMbFRl2EDf9w0QlPLA}
+			exit
+		}
+	}
+	
 	// If 'playlist' option is selected, we display the link to the Youtube playlist and exit the program
 	if  "`playlist'" != "" {
 		
@@ -61,7 +95,7 @@ cap prog drop REGgae_music
 	// If 'number' option is not used, we display one song
 	if 	  "`number'"   == "" local number = 1
 	
-	// If 'artist' option is used, check that artist exist in our list
+	// If 'artist' option is used, check that artist exists in our list
 	local  artistList `" "Chronixx""Protoje" "Alborosie" "Gentleman" "Bob Marley" "Etana" "Junior Kelly" "Anthony B" "Kabaka Pyramid" "Sara Lugo" "'
 	
 	if	 "`artist'"	   != "" {
