@@ -1,4 +1,4 @@
-*! version 0.1 18APR2019 Matteo Ruzzante mruzzante@worldbank.org
+*! version 0.1 20APR2019 Matteo Ruzzante mruzzante@worldbank.org
 
 // Reggae music random generator
 
@@ -7,8 +7,9 @@ cap prog drop REGgae_music
 
 	syntax	,									/// No variable required
 												///
+	   [BRowse]									/// Directly open the link in browser
 	   [NUMber(numlist int min=1)]				/// Number of songs (must be an interger equal or greater than 1)
-	   [PLAYlist]								///
+	   [PLAYlist]								/// Full playlist
 	   [PLATFORM(string)]						/// Music platform or website
 	   [ARTIST(string)]							/// Name of the artist
 	   [COUNTRY(string)]						/// Country of origin
@@ -53,6 +54,8 @@ cap prog drop REGgae_music
 			di as txt   "Blessing!"
 			di		    ""
 			di as text `"  {browse "https://www.youtube.com/watch?v=hzqFmXZ8tOE&list=PLC-aST3UH2m5tfv3RALnUA-z753ZDYSm7":https://www.youtube.com/watch?v=hzqFmXZ8tOE&list=PLC-aST3UH2m5tfv3RALnUA-z753ZDYSm7}
+			
+			if "`browse'" != "" view browse "https://www.youtube.com/watch?v=hzqFmXZ8tOE&list=PLC-aST3UH2m5tfv3RALnUA-z753ZDYSm7"
 			exit
 		}
 		
@@ -62,6 +65,8 @@ cap prog drop REGgae_music
 			di as txt   "Blessing!"
 			di		    ""
 			di as text `"  {browse "https://open.spotify.com/user/ruzzante.matteo/playlist/100XebrUHtUthBEoaKo0Ge?si=d592jMbFRl2EDf9w0QlPLA":https://open.spotify.com/user/ruzzante.matteo/playlist/100XebrUHtUthBEoaKo0Ge?si=d592jMbFRl2EDf9w0QlPLA}
+			
+			if "`browse'" != "" view browse "https://open.spotify.com/user/ruzzante.matteo/playlist/100XebrUHtUthBEoaKo0Ge?si=d592jMbFRl2EDf9w0QlPLA"
 			exit
 		}
 	}
@@ -73,6 +78,8 @@ cap prog drop REGgae_music
 		di as txt   "Blessing!"
 		di		    ""
 		di as text `"  {browse "https://www.youtube.com/watch?v=hzqFmXZ8tOE&list=PLC-aST3UH2m5tfv3RALnUA-z753ZDYSm7":https://www.youtube.com/watch?v=hzqFmXZ8tOE&list=PLC-aST3UH2m5tfv3RALnUA-z753ZDYSm7}
+		
+		if "`browse'" != "" view browse "https://www.youtube.com/watch?v=hzqFmXZ8tOE&list=PLC-aST3UH2m5tfv3RALnUA-z753ZDYSm7"
 		exit
 	}
 	
@@ -220,7 +227,7 @@ cap prog drop REGgae_music
 		noi di as error "We are sorry but we do not have any female reggae artist from Italy."
 		noi di as error "If you like any female reggae artist from there, feel free to suggest it by opening an issue in:""
 		noi di as error `" {browse "https://github.com/MRuzzante/Jah-referencing/issues":https://github.com/MRuzzante/Jah-referencing/issues}
-						   exit
+				  exit
 	}
 	
 	// Initialize song counter
@@ -251,6 +258,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Protoje & Chronixx}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=hzqFmXZ8tOE":https://www.youtube.com/watch?v=hzqFmXZ8tOE}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=hzqFmXZ8tOE"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -267,6 +276,8 @@ cap prog drop REGgae_music
 				di as txt  `" Everybody wanna feel irie.""'
 				di as txt   " {bf:Chronixx}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=049km3Vc02c":https://www.youtube.com/watch?v=049km3Vc02c}
+				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=049km3Vc02c"
 				
 				local songCount = `songCount' + 1
 			}
@@ -285,6 +296,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Chronixx}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=vofff0Ei3kk":https://www.youtube.com/watch?v=vofff0Ei3kk}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=vofff0Ei3kk"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -301,6 +314,8 @@ cap prog drop REGgae_music
 				di as txt  `" Welcome the rasta youths.""'
 				di as txt   " {bf:Chronixx}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=LfeIfiiBTfY":https://www.youtube.com/watch?v=LfeIfiiBTfY}
+				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=LfeIfiiBTfY"
 				
 				local songCount = `songCount' + 1
 			}
@@ -319,6 +334,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Alborosie}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=FxEubwOGzqY":https://www.youtube.com/watch?v=FxEubwOGzqY}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=FxEubwOGzqY"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -336,6 +353,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Alborosie}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=w0c_dv0TUmU":https://www.youtube.com/watch?v=w0c_dv0TUmU}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=FxEubwOGzqY"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -352,6 +371,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Alborosie & Gentleman}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=dN8FTAx06rE":https://www.youtube.com/watch?v=dN8FTAx06rE}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=dN8FTAx06rE"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -367,6 +388,8 @@ cap prog drop REGgae_music
 				di as txt  `""Don't let nobody rule your soul, no way.""'
 				di as txt   " {bf:Alborosie}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=uA112N_meog":https://www.youtube.com/watch?v=uA112N_meog}
+				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=uA112N_meog"
 				
 				local songCount = `songCount' + 1
 			}
@@ -385,6 +408,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Alborosie}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=4dYSkCVcPuc":https://www.youtube.com/watch?v=4dYSkCVcPuc}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=4dYSkCVcPuc"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -400,6 +425,8 @@ cap prog drop REGgae_music
 				di as txt  `""Babylon dem thief my herb dem thief my herb.""'
 				di as txt   " {bf:Alborosie}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=MYp_gJQwRx8":https://www.youtube.com/watch?v=MYp_gJQwRx8}
+				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=MYp_gJQwRx8"
 				
 				local songCount = `songCount' + 1
 			}
@@ -418,6 +445,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Alborosie & Chronixx}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=kuFI_jOSyGw":https://www.youtube.com/watch?v=kuFI_jOSyGw}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=kuFI_jOSyGw"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -434,6 +463,8 @@ cap prog drop REGgae_music
 				di as txt  `" Love is what you giving me troughout the years.""'
 				di as txt   " {bf:Gentleman}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=BtzGQIDOCkM":https://www.youtube.com/watch?v=BtzGQIDOCkM}
+				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=BtzGQIDOCkM"
 				
 				local songCount = `songCount' + 1
 			}
@@ -452,6 +483,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Gentleman}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=aktSkJ3USR4":https://www.youtube.com/watch?v=aktSkJ3USR4}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=aktSkJ3USR4"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -469,6 +502,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Bob Marley}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=kOFu6b3w6c0":https://www.youtube.com/watch?v=kOFu6b3w6c0}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=kOFu6b3w6c0"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -484,6 +519,8 @@ cap prog drop REGgae_music
 				di as txt  `""Let's get together and feel all right.""'
 				di as txt   " {bf:Bob Marley}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=vdB-8eLEW8g":https://www.youtube.com/watch?v=vdB-8eLEW8g}
+				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=vdB-8eLEW8g"
 				
 				local songCount = `songCount' + 1
 			}
@@ -502,6 +539,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Bob Marley}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=HgXMoZdY5A0":https://www.youtube.com/watch?v=HgXMoZdY5A0}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=HgXMoZdY5A0"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -519,6 +558,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Anthony B}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=UqeAr1gqxyU":https://www.youtube.com/watch?v=UqeAr1gqxyU}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=UqeAr1gqxyU"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -534,6 +575,8 @@ cap prog drop REGgae_music
 				di as txt  `""Tell me if love so nice.""'
 				di as txt   " {bf:Junior Kelly}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=tSkuJJnKk7o":https://www.youtube.com/watch?v=tSkuJJnKk7o}
+				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=tSkuJJnKk7o"
 				
 				local songCount = `songCount' + 1
 			}
@@ -551,6 +594,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Etana}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=jI7Y1SXPNXI":https://www.youtube.com/watch?v=jI7Y1SXPNXI}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=jI7Y1SXPNXI"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -566,6 +611,8 @@ cap prog drop REGgae_music
 				di as txt  `""Tell me if love so nice.""'
 				di as txt   " {bf:Junior Kelly}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=tSkuJJnKk7o":https://www.youtube.com/watch?v=tSkuJJnKk7o}
+				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=tSkuJJnKk7o"
 				
 				local songCount = `songCount' + 1
 			}
@@ -585,6 +632,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Kabaka Pyramid}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=yAbSe6JXOZs":https://www.youtube.com/watch?v=yAbSe6JXOZs}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=yAbSe6JXOZs"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -603,6 +652,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Kabaka Pyramid}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=BOx3nqWBe1c":https://www.youtube.com/watch?v=BOx3nqWBe1c}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=BOx3nqWBe1c"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -619,6 +670,8 @@ cap prog drop REGgae_music
 				di as txt  `" A must the reggae music, nothing else no have a chance.""'
 				di as txt   " {bf:Kabaka Pyramid}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=q05liMm3LI4":https://www.youtube.com/watch?v=q05liMm3LI4}
+				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=q05liMm3LI4"
 				
 				local songCount = `songCount' + 1
 			}
@@ -637,6 +690,8 @@ cap prog drop REGgae_music
 				di as txt   " {bf:Kabaka Pyramid}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=h8rClH-Jbno":https://www.youtube.com/watch?v=h8rClH-Jbno}
 				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=h8rClH-Jbno"
+				
 				local songCount = `songCount' + 1
 			}
 		}
@@ -653,6 +708,8 @@ cap prog drop REGgae_music
 				di as txt  `" Riding my troubles away.""'
 				di as txt   " {bf:Sara Lugo & Kabaka Pyramid}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=XDng01g3Ejw":https://www.youtube.com/watch?v=XDng01g3Ejw}
+				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=XDng01g3Ejw"
 				
 				local songCount = `songCount' + 1
 			}
@@ -671,6 +728,8 @@ cap prog drop REGgae_music
 				di as txt  `" Don't you think so, too.""'
 				di as txt   " {bf:Sara Lugo & Protoje}"
 				di as text `"  {browse "https://www.youtube.com/watch?v=dr9OXGqR8Tg":https://www.youtube.com/watch?v=dr9OXGqR8Tg}
+				
+				if "`browse'" != "" view browse "https://www.youtube.com/watch?v=dr9OXGqR8Tg"
 				
 				local songCount = `songCount' + 1
 			}
