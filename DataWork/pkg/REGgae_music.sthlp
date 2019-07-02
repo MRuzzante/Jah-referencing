@@ -11,11 +11,8 @@
 Help for {hi:REGgae_music} version 0.1
 {hline}
 
-{marker description}
-{title:Description}
 
-{p}{cmdab:REGgae_music} is the first music package for rasta Stata users.
-It randomly picks a reggae song to release any coding stress. Blessing!
+{p}{cmdab:REGgae_music} is the first music package for rasta Stata users. It randomly picks a reggae song to release any coding stress. Blessing!
 
 {marker syntax}
 {title:Syntax}
@@ -27,10 +24,10 @@ It randomly picks a reggae song to release any coding stress. Blessing!
 {synopthdr:Options}
 {synoptline}
 {it:    Display Options}
-{synopt:{opt  br:owse}}Directly open the link in your browser.{p_end}
-{synopt:{opth num:ber(#)}}Choose number of songs to be selected.{p_end}
-{synopt:{opt  play:list}}Display full playlist instead of song.{p_end}
-{synopt:{opt  platfrom(string)}}Specify  music platform (YouTube or Spotify).{p_end}
+{synopt:{opt  br:owse}}Directly open the link in your web browser.{p_end}
+{synopt:{opth num:ber(#)}}Choose number of songs to be selected; default is 1.{p_end}
+{synopt:{opt  play:list}}Display full playlist instead of song(s).{p_end}
+{synopt:{opt  platfrom(string)}}Specify  music platform ({it:YouTube} or {it:Spotify}); default is {it:Youtube}.{p_end}
 {break}
 {it:    Music Options}
 {synopt:{opt  artist(string)}}Specify artist.{p_end}
@@ -39,6 +36,16 @@ It randomly picks a reggae song to release any coding stress. Blessing!
 {synoptline}
 {p 4 6 2}{p_end}
 
+{marker overview}
+{title:Overview}
+
+{text}{p 2} After {cmdab:regress}, {cmdab:ivreg}, {cmdab:xtreg}, and
+{cmdab:reghdfe}, it's time for you to try the {cmdab:REGgae_music} package.
+Fill in your Stata breaks, celebrate the smooth run of your code, or just relax
+with some reggae music. You only need to type {inp} {stata REGgae_music} {text} 
+on your command window, or insert the command in the right place of your do-file,
+and the reggae package will select some song for you. Enjoy the tune!
+
 {marker example}
 {title:Examples}
 
@@ -46,7 +53,7 @@ It randomly picks a reggae song to release any coding stress. Blessing!
 
 {phang}{inp} {stata REGgae_music}
 
-{phang}{text} 2. Open the link created instead of showing.{p_end}
+{phang}{text} 2. Open the link created on your web browser, instead of displaying it on the result window.{p_end}
 
 {phang}{inp} {stata REGgae_music, browse}
 
@@ -108,6 +115,6 @@ the spiritual support of Jah in developing this command.{p_end}
 {p 2}{bf: REGgae_music} is open for development on {browse "https://github.com/MRuzzante/Jah-referencing/tree/REGgae_music":GitHub}.
 Submit bugs and feature requests {browse "https://github.com/MRuzzante/Jah-referencing/issues":here}.
 In particular, feel free to suggest any song or artist which is missing in our
-current selection, and a committed lead by Jonas C. Guthoff will decide upon
+current selection, and a committe lead by Jonas C. Guthoff will decide upon
 the inclusion.{p_end}
 
