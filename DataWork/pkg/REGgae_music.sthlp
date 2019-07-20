@@ -39,8 +39,8 @@ Help for {hi:REGgae_music} version 0.1
 {marker overview}
 {title:Overview}
 
-{text}{p 2} After {cmdab:regress}, {cmdab:ivreg}, {cmdab:xtreg}, and
-{cmdab:reghdfe}, it's time for you to try the {cmdab:REGgae_music} package.
+{text}{p 2} After {cmdab:regress}, {cmdab:ivreg}, {cmdab:xtreg}, {cmdab:areg},
+and {cmdab:reghdfe}, it's time for you to try the {cmdab:REGgae_music} package.
 Fill in your Stata breaks, celebrate the smooth run of your code, or just relax
 with some reggae music. You only need to type {inp} {stata REGgae_music} {text} 
 on your command window, or insert the command in the right place of your do-file,
@@ -61,25 +61,25 @@ and the reggae package will select some song for you. Enjoy the tune!
 
 {phang} {inp} {stata REGgae_music, number(5)}
 
-{phang}{text} 4. Open the playlist link (instead of picking a song).{p_end}
+{phang}{text} 4. Open the Youtube playlist link (instead of picking a song).{p_end}
 
 {phang}{inp} {stata REGgae_music, browse playlist}
 
-{phang}{text} 5. Create link to Spotify.{p_end}
+{phang}{text} 5. Open link to Spotify.{p_end}
 
 {phang}{inp} {stata REGgae_music, browse playlist platform(Spotify)}
 
-{phang}{text} 6. Select songs by {it:Protoje}.{p_end}
+{phang}{text} 6. Randomly select a song by {it:Protoje}.{p_end}
 
-{phang}{inp} {stata REGgae_music, browse artist(Protoje)}
+{phang}{inp} {stata REGgae_music, artist(Protoje)}
 
-{phang}{text} 7. Select songs by Jamaican artists.{p_end}
+{phang}{text} 7. Randomly select a song by Jamaican artists.{p_end}
 
-{phang}{inp} {stata REGgae_music, browse country(Jamaica)}
+{phang}{inp} {stata REGgae_music, country(Jamaica)}
 
-{phang}{text} 8. Select songs by female reggae artist.{p_end}
+{phang}{text} 8. Randomly select a song by a female reggae artist.{p_end}
 
-{phang}{inp} {stata REGgae_music, browse gender(Female)}{break}
+{phang}{inp} {stata REGgae_music, gender(Female)}{break}
 
 {hline}
 
@@ -114,7 +114,9 @@ the spiritual support of Jah in developing this command.{p_end}
 
 {p 2}{bf: REGgae_music} is open for development on {browse "https://github.com/MRuzzante/Jah-referencing/tree/REGgae_music":GitHub}.
 Submit bugs and feature requests {browse "https://github.com/MRuzzante/Jah-referencing/issues":here}.
-In particular, feel free to suggest any song or artist which is missing in our
+The full playlist is available here ({browse "https://www.youtube.com/playlist?list=PLC-aST3UH2m5tfv3RALnUA-z753ZDYSm7&disable_polymer=true":Youtube})
+and here ({browse "https://open.spotify.com/user/ruzzante.matteo/playlist/100XebrUHtUthBEoaKo0Ge?si=d592jMbFRl2EDf9w0QlPLA":Spotify}).
+Feel free to suggest any song or artist which is missing in our
 current selection, and a committe lead by Jonas C. Guthoff will decide upon
 the inclusion.{p_end}
 
