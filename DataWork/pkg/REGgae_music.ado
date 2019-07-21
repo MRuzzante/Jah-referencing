@@ -719,8 +719,8 @@ cap prog drop REGgae_music
 				
 				if "`platform'" == "youtube" {
 				
-					di as text 			`"  {browse "https://www.youtube.com/watch?v=Ov--KAGEuaw":https://www.youtube.com/watch?v=Ov--KAGEuaw}
-					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=Ov--KAGEuaw"
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=plYcRr5nnSc":https://www.youtube.com/watch?v=plYcRr5nnSc}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=plYcRr5nnSc"
 				}
 				
 				if "`platform'" == "spotify" {
