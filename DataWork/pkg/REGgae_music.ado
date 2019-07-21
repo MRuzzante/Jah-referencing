@@ -128,11 +128,11 @@ cap prog drop REGgae_music
 	#d	cr
 	
 	// Remove hyphen
-	if   "`artist'"	   == "ky-manimarley" ///
+	if   "`artist'"	   == "ky-manimarley"						///
 	local  artist 	    = "kymanimarley"
 	
 	// Replace too long artists
-	if   "`artist'"	   == "diplomaticoeilcollettivoninconanco" ///
+	if   "`artist'"	   == "diplomaticoeilcollettivoninconanco"	///
 	local  artist 	    = "diplomatico"
 	
 	// If 'artist' option is used, check that artist exists in our list
@@ -177,7 +177,10 @@ cap prog drop REGgae_music
 	}
 	
 	// Do the same process for countries
-	local countryList `" "jamaica" "canada" "france" "germany" "italy" "portugal" "unitedstates" "'
+	local countryList jamaica canada france germany italy portugal unitedstates
+	
+	if    inlist("`country'", "us", "usa", "theunitedstates")	///
+	local country 	    	= "unitedstates"
 	
 	if	 "`country'"	   != "" {
 		
@@ -243,13 +246,15 @@ cap prog drop REGgae_music
 	
 	
 	// Initialize song counter
-	local  totalSong  = 104
+	local  totalSong  = 104		//one less than the actual total to allow command to stop,
+								//otherwise, it will keep searching for a song without success,
+								//after all 'chooseSong' locals are shut down
 	local  songCount  =   0
 	
 	// If the number of songs chosen is larger than the total, we print an error
 	if 	  `number'    >   `totalSong' {
 		
-		   noi di as error "The {bf:number} you selected exceeds the number of songs available in the playlist. Please make sure to choose a number equal or lower than `totalSong'."
+		   noi di as error "The {bf:number} you selected exceeds the number of songs available in the playlist. Please make sure to choose a number lower than `totalSong'."
 		   exit
 	}
 	
@@ -1944,7 +1949,7 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 
-		// 59) Rivers To Cross
+		// 59) Many Rivers To Cross
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
 			if `jimmycliff' & `jamaica' & `male' & `chooseSong59' {
 				

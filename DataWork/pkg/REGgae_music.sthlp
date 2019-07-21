@@ -40,11 +40,12 @@ Help for {hi:REGgae_music} version 0.1
 {title:Overview}
 
 {text}{p 2} After {cmdab:regress}, {cmdab:ivreg}, {cmdab:xtreg}, {cmdab:areg},
-and {cmdab:reghdfe}, it's time for you to try the {cmdab:REGgae_music} package.
-Fill in your Stata breaks, celebrate the smooth run of your code, or just relax
-with some reggae music. You only need to type {inp} {stata REGgae_music} {text} 
-on your command window, or insert the command in the right place of your do-file,
-and the reggae package will select some song for you. Enjoy the tune!
+{cmdab:reghdfe}, and {cmdab:qreg}, it's time for you to try the
+{cmdab:REGgae_music} package. Fill in your Stata breaks, celebrate the smooth
+run of your code, or just relax with some reggae music. You only need to type
+{inp} {stata REGgae_music} {text} on your command window, or insert the command
+in the right place of your do-file, and the reggae package will select some
+song for you. And now, enjoy the tune!
 
 {marker example}
 {title:Examples}
@@ -87,15 +88,16 @@ and the reggae package will select some song for you. Enjoy the tune!
 {title:List of Artists and Countries}
 
 {text}{p 2} The current version of the package contains songs from: 99 Posse,
-Alborosie, Anthony B, Bob Marley & The Wailers, Capleton, Chronixx, Damian
-Marley, Etana, Forelock, Gentleman, Hempress Sativa, Jah Cure, Junior Kelly,
-Kabaka Pyramid, Ky-Mani Marley, Koffee, Mama Marjas, Mellow Mood,  Nas, Protoje,
-Queen Ifrica, Raging Fyah, Randy Valentine, Richie Campbell, Rita Marley,
-Romain Virgo, Sara Lugo, Sizzla, Stephen Marley, Tarrus Riley, and Ziggy
-Marley.{p_end}
+Alborosie, Anthony B, Bob Marley & The Wailers, Chronixx, Collie Buddz, Damian
+Marley, Diplomatico e il Collettivo Ninco Nanco, Dub Inc, Etana, Forelock,
+Gentleman, Hempress Sativa, Jah Cure, Jimmy Cliff, Junior Kelly, Kabaka Pyramid,
+Kathryn Aria, Ky-Mani Marley, Koffee, Mama Marjas, Mellow Mood, Mortimer,
+Naâman, Nas, Protoje, Raging Fyah, Randy Valentine, Richie Campbell, Richie
+Spice, Rita Marley, Sara Lugo, Stephen Marley, Sud Sound System, Tarrus Riley,
+Terroni Uniti, and Tribal Seeds.{p_end}
 
-{text}{p 2} Countries available in the playlists are Germany, Italy,
-United States, and, indeed, di island Jamaica! :)
+{text}{p 2} Countries available in the playlists are Canada, France, Germany,
+Italy, Portugal, United States, and, indeed, di motherland island Jamaica! :)
 
 {marker acknowledgements}
 {title:Acknowledgements}
@@ -116,7 +118,7 @@ the spiritual support of Jah in developing this command.{p_end}
 Submit bugs and feature requests {browse "https://github.com/MRuzzante/Jah-referencing/issues":here}.
 The full playlist is available here ({browse "https://www.youtube.com/playlist?list=PLC-aST3UH2m5tfv3RALnUA-z753ZDYSm7&disable_polymer=true":Youtube})
 and here ({browse "https://open.spotify.com/user/ruzzante.matteo/playlist/100XebrUHtUthBEoaKo0Ge?si=d592jMbFRl2EDf9w0QlPLA":Spotify}).
-Feel free to suggest any song or artist which is missing in our
-current selection, and a committe lead by Jonas C. Guthoff will decide upon
-the inclusion.{p_end}
+Feel free to suggest any song or artist, which is missing in our current
+selection, and a committe chaired by Jonas C. Guthoff will decide upon the
+inclusion.{p_end}
 
