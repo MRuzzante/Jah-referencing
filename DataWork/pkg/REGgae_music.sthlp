@@ -27,7 +27,7 @@ Help for {hi:REGgae_music} version 0.1
 {synopt:{opt  br:owse}}Directly open the link in your web browser.{p_end}
 {synopt:{opth num:ber(#)}}Choose number of songs to be selected; default is 1.{p_end}
 {synopt:{opt  play:list}}Display full playlist instead of song(s).{p_end}
-{synopt:{opt  platfrom(string)}}Specify  music platform ({it:YouTube} or {it:Spotify}); default is {it:Youtube}.{p_end}
+{synopt:{opt  platform(string)}}Specify music platform ({it:YouTube} or {it:Spotify}); default is {it:Youtube}.{p_end}
 {break}
 {it:    Music Options}
 {synopt:{opt  artist(string)}}Specify artist.{p_end}
