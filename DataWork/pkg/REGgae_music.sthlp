@@ -32,7 +32,7 @@ Help for {hi:REGgae_music} version 0.1
 {it:    Music Options}
 {synopt:{opt  artist(string)}}Specify artist.{p_end}
 {synopt:{opt  country(string)}}Specify country of origin.{p_end}
-{synopt:{opt  gender(string)}}Specify gender.{p_end}
+{synopt:{opt  sex(string)}}Specify artist sex ({it:male} or {it:female}).{p_end}
 {synoptline}
 {p 4 6 2}{p_end}
 
@@ -80,7 +80,7 @@ song for you. And now, enjoy the tune!
 
 {phang}{text} 8. Randomly select a song by a female reggae artist.{p_end}
 
-{phang}{inp} {stata REGgae_music, gender(Female)}{break}
+{phang}{inp} {stata REGgae_music, sex(Female)}{break}
 
 {hline}
 
@@ -96,14 +96,18 @@ Naâman, Nas, Protoje, Raging Fyah, Randy Valentine, Richie Campbell, Richie
 Spice, Rita Marley, Sara Lugo, Stephen Marley, Sud Sound System, Tarrus Riley,
 Terroni Uniti, and Tribal Seeds.{p_end}
 
-{text}{p 2} Countries available in the playlists are Canada, France, Germany,
-Italy, Portugal, United States, and, indeed, di motherland island Jamaica! :)
+{text}{p 2} Countries available in the playlists are Brazil, Canada, France,
+Germany, Italy, Portugal, United States, and, indeed, di motherland island
+Jamaica! :)
 
 {marker acknowledgements}
 {title:Acknowledgements}
 
 {text}{p 2}We would like to acknowledge the constant guidance of Selassie I and
 the spiritual support of Jah in developing this command.{p_end}
+
+{text}{p 2}Also, Luiza Andrade, Camila Ayala, Julie Bousquet, and Jonas Guthoff
+provided valuable comments and feedback.{p_end}
 
 {marker author}
 {title:Author}
@@ -119,6 +123,6 @@ Submit bugs and feature requests {browse "https://github.com/MRuzzante/Jah-refer
 The full playlist is available here ({browse "https://www.youtube.com/playlist?list=PLC-aST3UH2m5tfv3RALnUA-z753ZDYSm7&disable_polymer=true":Youtube})
 and here ({browse "https://open.spotify.com/user/ruzzante.matteo/playlist/100XebrUHtUthBEoaKo0Ge?si=d592jMbFRl2EDf9w0QlPLA":Spotify}).
 Feel free to suggest any song or artist, which is missing in our current
-selection, and a committe chaired by Jonas C. Guthoff will decide upon the
+selection, and a committee chaired by Jonas C. Guthoff will decide upon the
 inclusion.{p_end}
 

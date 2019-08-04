@@ -1,4 +1,4 @@
-*! version 0.1 20JUL2019 Matteo Ruzzante ruzzante.matteo@gmail.com
+*! version 0.1 5AUG2019 Matteo Ruzzante ruzzante.matteo@gmail.com
 
 // Reggae music random generator
 
@@ -12,8 +12,8 @@ cap prog drop REGgae_music
 	   [PLAYlist]								/// Full playlist
 	   [PLATFORM(string)]						/// Music platform or website
 	   [ARTIST(string)]							/// Name of the artist
-	   [COUNTRY(string)]						/// Country of origin
-	   [GENDER(string)]        					/// Gender of (one of) the singer(s)
+	   [COUNTRY(string)]						/// Country of origin of (one of) the artist(s)
+	   [SEX(string)]        					/// Sex of (one of) the artist(s)
 	   
 	   
 	// Set minimum version for this command
@@ -23,7 +23,7 @@ cap prog drop REGgae_music
 		
 		// Error for playlist and other option incorrectly used together
 		
-		foreach optionName in number artist country gender {
+		foreach optionName in number artist country sex {
 	
 			if "``optionName''" != "" {
 			
@@ -34,7 +34,7 @@ cap prog drop REGgae_music
 	}
 	
 	// Transform all option strings
-	foreach optionName in platform artist country gender {
+	foreach optionName in platform artist country sex {
 		
 		local `optionName' =  trim("``optionName''") //trim() is older syntax, compare to strtrim() in Stata 15 and newer
 		local `optionName' = lower("``optionName''")
@@ -81,7 +81,7 @@ cap prog drop REGgae_music
 		}
 	}
 		
-	// Error for artist, country and/or gender option incorrectly used together
+	// Error for artist, country and/or sex option incorrectly used together
 	if   "`artist'" != "" {
 	
 		if "`country'" != "" {
@@ -90,9 +90,9 @@ cap prog drop REGgae_music
 						  error  197
 		}
 		
-		if "`gender'" != "" {
+		if "`sex'" != "" {
 			
-				noi di as error "Option {bf:gender} may not be used in combination with option {bf:artist}."
+				noi di as error "Option {bf:sex} may not be used in combination with option {bf:artist}."
 						  error  197
 		}
 	}	
@@ -107,20 +107,19 @@ cap prog drop REGgae_music
 			   99posse
 			   alborosie anthonyb
 			   bobmarley
-			   chronixx colliebuddz
-			   damianmarley dubinc diplomatico
+			   chronixx claudialeitte colliebuddz
+			   damianmarley diplomatico dubinc duobucolico
 			   etana
 			   forelock
 			   gentleman
 			   hempresssativa
 			   jah9 jahcure jimmycliff juniorkelly
 			   kabakapyramid kathrynaria koffee konshens kymanimarley
-			   i-octane
 			   mamamarjas mellowmood morganheritage mortimer
-			   naâman nas
+			   naâman nas natiruts
 			   protoje
 			   queenifrica
-			   randyvalentine richiecampbell richiespice ritamarley romainvirgo
+			   ragingfyah randyvalentine richiecampbell richiespice ritamarley romainvirgo
 			   saralugo sizzla soja stephenmarley sudsoundsystem
 			   tarrusriley terroniuniti thewailers tribalseeds
 			   ziggymarley
@@ -177,7 +176,7 @@ cap prog drop REGgae_music
 	}
 	
 	// Do the same process for countries
-	local countryList jamaica canada france germany italy portugal unitedstates
+	local countryList jamaica brazil canada france germany italy portugal unitedstates
 	
 	if    inlist("`country'", "us", "usa", "theunitedstates")	///
 	local country 	    	= "unitedstates"
@@ -185,6 +184,7 @@ cap prog drop REGgae_music
 	if	 "`country'"	   != "" {
 		
 		if   "`country'"   != "jamaica" 	 & ///
+			 "`country'"   != "brazil"		 & ///
 			 "`country'"   != "canada"   	 & ///
 			 "`country'"   != "france"   	 & ///
 			 "`country'"   != "germany" 	 & ///
@@ -216,43 +216,43 @@ cap prog drop REGgae_music
 		}
 	}
 	
-	// Do the same process for gender
-	if	 "`gender'"	   != "" {
+	// Do the same process for sex
+	if	 "`sex'"	   != "" {
 		
-		if   "`gender'"   != "female" & ///
-			 "`gender'"   != "male"   {
+		if   "`sex'"   != "female" & ///
+			 "`sex'"   != "male"   {
 				
-				 noi di as error "The {bf:gender} you selected is not available. Please make sure to type Female or Male in the option argument."
+				 noi di as error "The {bf:sex} you selected is not available. Please make sure to type Female or Male in the option argument."
 						   exit
 		}
 	}
 	
-	if	 "`gender'"	   != "" {
+	if	 "`sex'"	   != "" {
 	
-		foreach genderType in female male {
+		foreach sexType in female male {
 			
-											local `genderType' = 0
-			if "`gender'" == "`genderType'" local `genderType' = 1
+									  local `sexType' = 0
+			if "`sex'" == "`sexType'" local `sexType' = 1
 		}
 	}
 	
-	if	  "`gender'"   == "" {
+	if	  "`sex'"   == "" {
 	
-		foreach genderType in female male {
+		foreach sexType in female male {
 		
-			local `genderType' = 1
+			local `sexType' = 1
 		}
 	}
 	
 	
 	// Initialize song counter
-	local  totalSong  = 104		//one less than the actual total to allow command to stop,
-								//otherwise, it will keep searching for a song without success,
-								//after all 'chooseSong' locals are shut down
+	local  totalSong  = 122
 	local  songCount  =   0
 	
 	// If the number of songs chosen is larger than the total, we print an error
-	if 	  `number'    >   `totalSong' {
+	if 	  `number'    >   `=`totalSong'-2' { //two less than the actual total to allow command to stop,
+										     //otherwise, it will keep searching for a song without success,
+											 //after all 'chooseSong' locals are shut down
 		
 		   noi di as error "The {bf:number} you selected exceeds the number of songs available in the playlist. Please make sure to choose a number lower than `totalSong'."
 		   exit
@@ -513,9 +513,39 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 9) "Still Blazing"
+		// 9) "Rock The Dancehall"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
 			if `alborosie' & `italy' & `male' & `chooseSong9' {
+				
+				di  		""
+				di as txt  `""Reggae Music still a ram the dancehall"'
+				di as txt  `" Rub a dub music still a rock the dancehall.""'
+				di as txt   " {bf:Alborosie}"
+				
+				if "`platform'" == "youtube" {
+				
+					di as text			`"  {browse "https://www.youtube.com/watch?v=4uKX5CS75fA":https://www.youtube.com/watch?v=4uKX5CS75fA}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=4uKX5CS75fA"
+				}
+				
+				if "`platform'" == "spotify" {
+				
+					di as text			`"  {browse "https://open.spotify.com/track/2dePsNPukZ3fqikLNieXvk?si=-p7BIzP0Q5Ck45qdum1MzA":https://open.spotify.com/track/2dePsNPukZ3fqikLNieXvk?si=-p7BIzP0Q5Ck45qdum1MzA}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/2dePsNPukZ3fqikLNieXvk?si=-p7BIzP0Q5Ck45qdum1MzA"
+				}
+				
+				local chooseSong9 = 0
+				local songCount   = 1 + `songCount'
+			}
+		}
+
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+	
+		
+		// 10) "Still Blazing"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `alborosie' & `italy' & `male' & `chooseSong10' {
 				
 				di  		""
 				di as txt  `""Don't let nobody rule your soul, no way.""'
@@ -533,17 +563,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3sbBOn0ifcgoX3MfaTeFKr?si=eonpS3P0QcS2h_6O0yGmiA"
 				}
 				
-				local chooseSong9 = 0
-				local songCount   = 1 + `songCount'
+				local chooseSong10 = 0
+				local songCount    = 1 + `songCount'
 			}
 		}
 		
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 10) "Contradiction"
+		// 11) "Contradiction"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`alborosie' == 1 | `chronixx' == 1) & (`italy' == 1 | `jamaica' == 1) & `male' == 1 & `chooseSong10' == 1 {	
+			if (`alborosie' == 1 | `chronixx' == 1) & (`italy' == 1 | `jamaica' == 1) & `male' == 1 & `chooseSong11' == 1 {	
 				
 				di  		""
 				di as txt  `""Contradiction global"'
@@ -563,7 +593,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4A2EuH7CRXeUpLh84TLsav?si=CXsKn2SASYWTUI9fYtBvSg"
 				}
 				
-				local chooseSong10 = 0
+				local chooseSong11 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -571,9 +601,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 11) "Blessings"
+		// 12) "Blessings"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`alborosie' == 1 | `etana' == 1) & ((`italy' == 1  & `male' == 1) | (`jamaica' == 1 & `female' == 1)) & `chooseSong11' == 1 {
+			if (`alborosie' == 1 | `etana' == 1) & ((`italy' == 1  & `male' == 1) | (`jamaica' == 1 & `female' == 1)) & `chooseSong12' == 1 {
 				
 				di  		""
 				di as txt  `""Cause when a man love a woman and a woman love a man"'
@@ -592,7 +622,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4T1YRV5aIiOD7i0TB9yKKA?si=GIgj0g4hTc2uZTju6F9lPw"
 				}
 				
-				local chooseSong11 = 0
+				local chooseSong12 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -600,9 +630,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 12) "Journey to Jah"
+		// 13) "Journey to Jah"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`alborosie' == 1 | `gentleman' == 1) & (`italy' == 1 | `germany' == 1) & `male' == 1  & `chooseSong12' == 1 {
+			if (`alborosie' == 1 | `gentleman' == 1) & (`italy' == 1 | `germany' == 1) & `male' == 1  & `chooseSong13' == 1 {
 				
 				//"Journey to Jah" is only availabe on Youtube
 				if "`platform'" == "youtube" {
@@ -614,7 +644,7 @@ cap prog drop REGgae_music
 					di as text 			`"  {browse "https://www.youtube.com/watch?v=dN8FTAx06rE":https://www.youtube.com/watch?v=dN8FTAx06rE}
 					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=dN8FTAx06rE"
 					
-					local chooseSong12 = 0
+					local chooseSong13 = 0
 					local songCount    = 1 + `songCount'
 				}
 				
@@ -625,9 +655,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 13) "Mystical Reggae"
+		// 14) "Mystical Reggae"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`alborosie' == 1 | `jahcure' == 1) & (`italy' == 1 | `jamaica' == 1) & `male' == 1 & `chooseSong13' == 1 {
+			if (`alborosie' == 1 | `jahcure' == 1) & (`italy' == 1 | `jamaica' == 1) & `male' == 1 & `chooseSong14' == 1 {
 				
 				//"Mystical Reggae" is only availabe on Spotify
 				if "`platform'" == "youtube" continue
@@ -641,7 +671,7 @@ cap prog drop REGgae_music
 					di as text 			`"  {browse "https://open.spotify.com/track/3yjjW4ajNwJ5ikNb4fxGy2?si=zaS3l5eASauRPOSgpHuC9Q":https://open.spotify.com/track/3yjjW4ajNwJ5ikNb4fxGy2?si=zaS3l5eASauRPOSgpHuC9Q}
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3yjjW4ajNwJ5ikNb4fxGy2?si=zaS3l5eASauRPOSgpHuC9Q"
 				
-					local chooseSong13 = 0
+					local chooseSong14 = 0
 					local songCount    = 1 + `songCount'
 				}
 			}
@@ -650,9 +680,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 14) "Strolling"
+		// 15) "Strolling"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`alborosie' == 1 | `protoje' == 1) & (`italy' == 1 | `jamaica' == 1) & `male' == 1 & `chooseSong14' == 1 {
+			if (`alborosie' == 1 | `protoje' == 1) & (`italy' == 1 | `jamaica' == 1) & `male' == 1 & `chooseSong15' == 1 {
 				
 				di  		""
 				di as txt  `""Over the mountains, across the seas"'
@@ -672,7 +702,37 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3NAw0zn9VETypbwkJMt747?si=YRb-WvlxRPWfiCDjkrsAXw"
 				}
 				
-				local chooseSong14 = 0
+				local chooseSong15 = 0
+				local songCount    = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+
+		// 16) "The Unforgiven"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if (`alborosie' == 1 | `ragingfyah' == 1) & (`italy' == 1 | `jamaica' == 1) & `male' == 1 & `chooseSong16' == 1 {
+				
+				di  		""
+				di as txt  `""Never free"'
+				di as txt  `" Never me"'
+				di as txt  `" So I dub thee unforgiven.""'
+				di as txt   " {bf:Alborosie & Raging Fyah}"
+								
+				if "`platform'" == "youtube" {
+				
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=W5IBHF98mSI":https://www.youtube.com/watch?v=W5IBHF98mSI}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=W5IBHF98mSI"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/59ZLlnNh4oAbEKouRqQ3tX?si=VQ8xjtp0T9algIlxd-b3ZQ":https://open.spotify.com/track/59ZLlnNh4oAbEKouRqQ3tX?si=VQ8xjtp0T9algIlxd-b3ZQ}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/59ZLlnNh4oAbEKouRqQ3tX?si=VQ8xjtp0T9algIlxd-b3ZQ"
+				}
+				
+				local chooseSong16 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -680,9 +740,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 15) "Can't Stop The Fire"
+		// 17) "Can't Stop The Fire"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `anthonyb' & `jamaica' & `male' & `chooseSong15' {
+			if `anthonyb' & `jamaica' & `male' & `chooseSong17' {
 				
 				di  		""
 				di as txt  `""Can't stop di fiyah keep it burning.""'
@@ -700,7 +760,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4jmULYj986UBTySibS1Bdn?si=6-PDscBZQVabfVqgzNuwkA"
 				}
 				
-				local chooseSong15 = 0
+				local chooseSong17 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -708,9 +768,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 16) "Freedom Fighter"
+		// 18) "Freedom Fighter"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `anthonyb' & `jamaica' & `male' & `chooseSong16' {
+			if `anthonyb' & `jamaica' & `male' & `chooseSong18' {
 				
 				di  		""
 				di as txt  `""Run for cover"'
@@ -729,7 +789,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/37L9OjM5qrJMa29gT9HKGW?si=NnRf59oATqm7_yQ07V_Y0g"
 				}
 				
-				local chooseSong16 = 0
+				local chooseSong18 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -737,9 +797,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 17) "Good Cop Bad Cop"
+		// 19) "Good Cop Bad Cop"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `anthonyb' & `jamaica' & `male' & `chooseSong17' {
+			if `anthonyb' & `jamaica' & `male' & `chooseSong19' {
 				
 				di  		""
 				di as txt  `""Good cop, bad cop.""'
@@ -757,7 +817,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3nkhq24WT28eKVYta3yyhE?si=cD1N-FdWQ1aCwT-sZV-Frw"
 				}
 				
-				local chooseSong17 = 0
+				local chooseSong19 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -765,9 +825,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 
-		// 18) "King In My Castle"
+		// 20) "King In My Castle"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `anthonyb' & `jamaica' & `male' & `chooseSong18' {
+			if `anthonyb' & `jamaica' & `male' & `chooseSong20' {
 				
 				di  		""
 				di as txt  `""Each and everyone was born as a king"'
@@ -787,7 +847,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3nkhq24WT28eKVYta3yyhE?si=cD1N-FdWQ1aCwT-sZV-Frw"
 				}
 				
-				local chooseSong18 = 0
+				local chooseSong20 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -795,9 +855,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 19) "Love Come Down"
+		// 21) "Love Come Down"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `anthonyb' & `jamaica' & `male' & `chooseSong19' {
+			if `anthonyb' & `jamaica' & `male' & `chooseSong21' {
 				
 				di  		""
 				di as txt  `""Girl you make my love come down.""'
@@ -815,7 +875,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/63SqSUAOIcPxCt4piwgyFh?si=k4h8eRNzRg26gF_fauR7YA"
 				}
 				
-				local chooseSong19 = 0
+				local chooseSong21 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -823,9 +883,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 20) "My Yes & My No"
+		// 22) "My Yes & My No"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `anthonyb' & `jamaica' & `male' & `chooseSong20' {
+			if `anthonyb' & `jamaica' & `male' & `chooseSong22' {
 				
 				di  		""
 				di as txt  `""You are my yes and my no"'
@@ -844,7 +904,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/7HwzUApZNxS4ZzUhyyokx7?si=hasSCIShRHmF_VaGFlExWA"
 				}
 				
-				local chooseSong20 = 0
+				local chooseSong22 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -852,9 +912,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 21) "Police"
+		// 23) "Police"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `anthonyb' & `jamaica' & `male' & `chooseSong21' {
+			if `anthonyb' & `jamaica' & `male' & `chooseSong23' {
 				
 				di  		""
 				di as txt  `""Who want the dancehall fi stop?""'
@@ -872,7 +932,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/6LtaXQAwy6qy3lnSP0BuZ3?si=lHfeWkPdTICj08LoI3fuaA"
 				}
 				
-				local chooseSong21 = 0
+				local chooseSong23 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -880,9 +940,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 22) "Unbalance"
+		// 24) "Unbalance"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `anthonyb' & `jamaica' & `male' & `chooseSong22' {
+			if `anthonyb' & `jamaica' & `male' & `chooseSong24' {
 				
 				di  		""
 				di as txt  `""Unbalance"'
@@ -901,7 +961,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/74LWzRoSPSOPDgmcMlCUVs?si=n9ePvGN2SIuS-ZvxVU5t8g"
 				}
 				
-				local chooseSong22 = 0
+				local chooseSong24 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -909,9 +969,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 			
-		// 23) "World A Reggae Music"
+		// 25) "World A Reggae Music"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `anthonyb' & `jamaica' & `male' & `chooseSong23' {
+			if `anthonyb' & `jamaica' & `male' & `chooseSong25' {
 				
 				di  		""
 				di as txt  `""World a reggae music on ya - eh"'
@@ -930,7 +990,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3Gym3Rtm6FHpTrLlJTcz3j?si=5Xkwl1UkRG6PjyicqqtCjA"
 				}
 				
-				local chooseSong23 = 0
+				local chooseSong25 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -938,9 +998,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 24) "Buffalo Soldier"
+		// 26) "Buffalo Soldier"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong24' == 1 {
+			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong26' == 1 {
 				
 				di  		""
 				di as txt  `""Buffalo Soldier, Dreadlock Rasta"'
@@ -962,7 +1022,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/7BfW1eoDh27W69nxsmRicb?si=l5iJ2FilQ8OxoyXTzJF7Kg"
 				}
 				
-				local chooseSong24 = 0
+				local chooseSong26 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -970,9 +1030,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 25) "Could You Be Loved"
+		// 27) "Could You Be Loved"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong25' == 1 {
+			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong27' == 1 {
 				
 				di  		""
 				di as txt  `""Could you be loved and be loved?""'
@@ -990,7 +1050,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/5O4erNlJ74PIF6kGol1ZrC?si=RWWB6q5ER3y2QedyWwrheg"
 				}
 				
-				local chooseSong25 = 0
+				local chooseSong27 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -998,9 +1058,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 26) "Don't Worry Be Happy"
+		// 28) "Don't Worry Be Happy"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong26' == 1 {
+			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong28' == 1 {
 					
 				if "`platform'" == "youtube" {
 					
@@ -1013,7 +1073,7 @@ cap prog drop REGgae_music
 					di as text			`"  {browse "https://www.youtube.com/watch?v=L3HQMbQAWRc":https://www.youtube.com/watch?v=L3HQMbQAWRc}
 					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=L3HQMbQAWRc"
 				
-					local chooseSong26 = 0
+					local chooseSong28 = 0
 					local songCount    = 1 + `songCount'
 				}
 					
@@ -1024,9 +1084,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 27) "Iron Lion Zion"
+		// 29) "Iron Lion Zion"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong27' == 1 {
+			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong38' == 1 {
 				
 				di  		""
 				di as txt  `""I had to run like a fugitive just to save the life I live"'
@@ -1045,7 +1105,36 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/57bvNqmSDfAakSot4cCn70?si=ep0nKfvETvK0gbYRLrhN9A"
 				}
 				
-				local chooseSong27 = 0
+				local chooseSong38 = 0
+				local songCount    = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+
+		// 30) "Is This Love"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong30' == 1 {
+				
+				di  		""
+				di as txt  `""I want to love you, and treat you right"'
+				di as txt  `" I want to love you, every day and every night.""'
+				di as txt   " {bf:Bob Marley & The Wailers}"
+				
+				if "`platform'" == "youtube" {
+				
+					di as text			`"  {browse "https://www.youtube.com/watch?v=CHekNnySAfM":https://www.youtube.com/watch?v=CHekNnySAfM}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=CHekNnySAfM"
+				}
+					
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/6JRLFiX9NJSoRRKxowlBYr?si=JPsxdL4mROyvBs8LiQYoTg":https://open.spotify.com/track/6JRLFiX9NJSoRRKxowlBYr?si=JPsxdL4mROyvBs8LiQYoTg}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/6JRLFiX9NJSoRRKxowlBYr?si=JPsxdL4mROyvBs8LiQYoTg"
+				}
+				
+				local chooseSong30 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1053,9 +1142,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 28) "Natural Mystic"
+		// 31) "Natural Mystic"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong28' == 1 {
+			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong31' == 1 {
 				
 				di  		""
 				di as txt  `""There's a natural mystic"'
@@ -1074,7 +1163,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/1YP719l4JjsOmyU4PGv3c0?si=Cm3KbJbiQ6KRsAhBuUaLiA"
 				}
 				
-				local chooseSong28 = 0
+				local chooseSong31 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1082,9 +1171,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 29) "No Woman No Cry"
+		// 32) "No Woman No Cry"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong29' == 1 {
+			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong32' == 1 {
 								
 				di  		""
 				di as txt  `""No woman, no cry"'
@@ -1103,14 +1192,14 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3PQLYVskjUeRmRIfECsL0X?si=QKAD7Q6PSe2Q-40wxtOQ0Q"
 				}
 				
-				local chooseSong29 = 0
+				local chooseSong32 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
 		
-		// 30) "One Love"
+		// 33) "One Love"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong30' == 1 {
+			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong33' == 1 {
 				
 				di  		""
 				di as txt  `""Let's get together and feel all right.""'
@@ -1132,7 +1221,7 @@ cap prog drop REGgae_music
 				di as txt  `""Let's get together and feel all right.""'
 				di as txt   " {bf:Bob Marley  & The Wailers}"
 								
-				local chooseSong30 = 0
+				local chooseSong33 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1140,9 +1229,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 31) "Redemption Song"
+		// 34) "Redemption Song"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong31' == 1 {
+			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong34' == 1 {
 				
 				di  		""
 				di as txt  `""Emancipate yourselves from mental slavery"'
@@ -1161,7 +1250,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/26PwuMotZqcczKLHi4Htz3?si=5qd3QT0zSXmpB9ympgwRnQ"
 				}
 				
-				local chooseSong31 = 0
+				local chooseSong34 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1169,9 +1258,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 32) Three Little Birds
+		// 35) Three Little Birds
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong32' == 1 {
+			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong35' == 1 {
 				
 				di  		""
 				di as txt  `""Don't worry about a thing"'
@@ -1190,14 +1279,14 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/6A9mKXlFRPMPem6ygQSt7z?si=QNtFurRxQBKtTjwgipP9aA"
 				}
 				
-				local chooseSong32 = 0
+				local chooseSong35 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
 		
-		// 33) "Here Comes Trouble"
+		// 36) "Here Comes Trouble"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `chronixx' & `jamaica' & `male' & `chooseSong33' {
+			if `chronixx' & `jamaica' & `male' & `chooseSong36' {
 				
 				di  		""
 				di as txt  `""Welcome the savior"'
@@ -1216,7 +1305,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/5Wwr2S7QZTR5PVJn6jhgdk?si=p1vSLV5RSmqU9G21KrmNhg"
 				}
 				
-				local chooseSong33 = 0
+				local chooseSong36 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1224,9 +1313,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 34) "Skankin' Sweet"
+		// 37) "Skankin' Sweet"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `chronixx' & `jamaica' & `male' & `chooseSong34' {
+			if `chronixx' & `jamaica' & `male' & `chooseSong37' {
 				
 				di  		""
 				di as txt  `""Skankin' sweet"'
@@ -1245,7 +1334,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/5SQaQWvBDEAeug4EPyYEGE?si=0Rw6KzRfQ_OmBgmx8kGcKg"
 				}
 				
-				local chooseSong34 = 0
+				local chooseSong37 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}	
@@ -1253,9 +1342,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 35) "Smile Jamaica"
+		// 38) "Smile Jamaica"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `chronixx' & `jamaica' & `male' & `chooseSong35' {
+			if `chronixx' & `jamaica' & `male' & `chooseSong38' {
 				
 				di  		""
 				di as txt  `""Smile girl smile"'
@@ -1274,7 +1363,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/7KhQx2EJaZIPGsbMAjf4jg?si=Hct-rsyBReemG39GQsxURQ"
 				}
 				
-				local chooseSong35 = 0
+				local chooseSong38 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1282,9 +1371,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 36) "Spanish Town Rockin'"
+		// 39) "Spanish Town Rockin'"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `chronixx' & `jamaica' & `male' & `chooseSong36' {
+			if `chronixx' & `jamaica' & `male' & `chooseSong39' {
 				
 				di  		""
 				di as txt  `""Spanish Town groovy"'
@@ -1303,7 +1392,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4Qup2zholspnhLpgkO77C2?si=ZoWaBjb-Rs232yhw-jvC9w"
 				}
 				
-				local chooseSong36 = 0
+				local chooseSong39 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1311,9 +1400,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 37) "Bun Down Di System"
+		// 40) "Bun Down Di System"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `colliebuddz' & `unitedstates' & `male' & `chooseSong37' == 1 {
+			if `colliebuddz' & `unitedstates' & `male' & `chooseSong40' == 1 {
 					
 				if "`platform'" == "youtube" {
 					
@@ -1325,7 +1414,7 @@ cap prog drop REGgae_music
 					di as text			`"  {browse "https://www.youtube.com/watch?v=LCIXqFm9YEU":https://www.youtube.com/watch?v=LCIXqFm9YEU}
 					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=LCIXqFm9YEU"
 				
-					local chooseSong37 = 0
+					local chooseSong40 = 0
 					local songCount    = 1 + `songCount'
 				}
 					
@@ -1336,9 +1425,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 38) "Autumn Leaves"
+		// 41) "Autumn Leaves"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `damianmarley' & `jamaica' & `male' & `chooseSong38' {
+			if `damianmarley' & `jamaica' & `male' & `chooseSong41' {
 				
 				di  		""
 				di as txt  `""Life is full of ups and downs"'
@@ -1359,7 +1448,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/318LuiMBWwZ2yKK2D1w5l2?si=3OMAzswISj6YY-XASMy4kQ"
 				}
 				
-				local chooseSong38 = 0
+				local chooseSong41 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1367,9 +1456,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 39) "Living It Up"
+		// 42) "Living It Up"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `damianmarley' & `jamaica' & `male' & `chooseSong39' {
+			if `damianmarley' & `jamaica' & `male' & `chooseSong42' {
 				
 				di  		""
 				di as txt  `""Believe in your dreams"'
@@ -1388,7 +1477,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/0Xd3LUIjRESt5rSAGzvAvA?si=9UxmnVStQLidUU3VSoeABg"
 				}
 				
-				local chooseSong39 = 0
+				local chooseSong42 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1396,9 +1485,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 40) "Welcome To Jamrock"
+		// 43) "Welcome To Jamrock"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `damianmarley' & `jamaica' & `male' & `chooseSong40' {
+			if `damianmarley' & `jamaica' & `male' & `chooseSong43' {
 				
 				di  		""
 				di as txt  `""Hey, welcome to Jamrock"'
@@ -1417,7 +1506,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/22AbXxQbMdVqEz7xJjhccG?si=SHnoYAvWQ_mMYQZC3WMdEw"
 				}
 				
-				local chooseSong40 = 0
+				local chooseSong43 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1425,9 +1514,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 41) "Road to Zion"
+		// 44) "Road to Zion"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`damianmarley' == 1 | `nas' == 1) & (`jamaica' == 1 | `unitedstates' == 1) & `male' == 1 & `chooseSong41' == 1 {
+			if (`damianmarley' == 1 | `nas' == 1) & (`jamaica' == 1 | `unitedstates' == 1) & `male' == 1 & `chooseSong44' == 1 {
 				
 				di  		""
 				di as txt  `""I got to keep on walking on the road to Zion, man"'
@@ -1446,7 +1535,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/6Ja1mjO9WcJFX3LsH22gRk?si=aYe53A6aTrKbndMSWBjwSQ"
 				}
 				
-				local chooseSong41 = 0
+				local chooseSong44 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1454,9 +1543,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 42) "Medication"
+		// 45) "Medication"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`damianmarley' == 1 | `stephenmarley' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong42' == 1 {
+			if (`damianmarley' == 1 | `stephenmarley' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong45' == 1 {
 				
 				di  		""
 				di as txt  `""Elevation"'
@@ -1475,7 +1564,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/2WQKHNETUytUGsD32TTNeO?si=xjZJFgn2SASIyaHk1WVjXw"
 				}
 				
-				local chooseSong42 = 0
+				local chooseSong45 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1483,9 +1572,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 43) "Due Mari"
+		// 46) "Due Mari"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `diplomatico' & `italy' & `male' & `chooseSong43' {
+			if `diplomatico' & `italy' & `male' & `chooseSong46' {
 				
 				if "`platform'" == "youtube" {
 					
@@ -1498,7 +1587,7 @@ cap prog drop REGgae_music
 					di as text 			`"  {browse "https://www.youtube.com/watch?v=xlCmQcRPtRg":https://www.youtube.com/watch?v=xlCmQcRPtRg}
 					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=xlCmQcRPtRg"
 					
-					local chooseSong43 = 0
+					local chooseSong46 = 0
 					local songCount    = 1 + `songCount'
 				}
 				
@@ -1509,9 +1598,39 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 44) "Rude Boy"
+		// 47) "Maché Bécif"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `dubinc' & `france' & `male' & `chooseSong44' {
+			if `dubinc' & `france' & `male' & `chooseSong47' {
+				
+				di  		""
+				di as txt  `""Même couleur dans nos mains malgré notre épiderme,"'
+				di as txt  `""Les consonnes peuvent se lire s’il y a des voyelles,"'
+				di as txt  `" Le futur de nos vies se conjugue au pluriel.""'
+				di as txt	" {bf:Dub Inc}"
+
+				if "`platform'" == "youtube" {
+				
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=7v_e7xAvvDc":https://www.youtube.com/watch?v=7v_e7xAvvDc}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=7v_e7xAvvDc"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/2GJSKtIC8zUXJtTLu3mMgr?si=viItVi1KTdadwhrno71nnQ":https://open.spotify.com/track/2GJSKtIC8zUXJtTLu3mMgr?si=viItVi1KTdadwhrno71nnQ}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/2GJSKtIC8zUXJtTLu3mMgr?si=viItVi1KTdadwhrno71nnQ"
+				}
+				
+				local chooseSong47 = 0
+				local songCount    = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		// 48) "Rude Boy"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `dubinc' & `france' & `male' & `chooseSong48' {
 				
 				di  		""
 				di as txt  `""Call me say rudeboy"'
@@ -1530,7 +1649,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/1OR5HVQgKpCZn2JNIwTKmq?si=-R9G3EfgTySnsjJyeGmUZg"
 				}
 				
-				local chooseSong44 = 0
+				local chooseSong48 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1538,9 +1657,40 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 45) "Justice"
+		// 49) "Tout ce qu'ils veulent"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`dubinc' == 1 | `mellowmood' == 1) & (`france' == 1 | `italy' == 1) & `male' == 1 & `chooseSong45' == 1 {
+			if `dubinc' & `france' & `male' & `chooseSong49' {
+				
+				di  		""
+				di as txt  `""Tout ce qu'ils veulent c'est une France qui ferme sa gueule,"'
+				di as txt  `" Une fois de plus la machine est lancée,"'
+				di as txt  `" Tout ce qu'ils veulent c'est une nation comme idole,"'
+				di as txt  `" Une fois de plus la sentence est tombée.""'
+				di as txt	" {bf:Dub Inc}"
+
+				if "`platform'" == "youtube" {
+				
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=d9ZsWR4unWY":https://www.youtube.com/watch?v=d9ZsWR4unWY}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=d9ZsWR4unWY"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/0Na0p2ZgAfOqETd5E6X1Xf?si=6Bu6r9GNQziOoHB0vDj2NQ":https://open.spotify.com/track/0Na0p2ZgAfOqETd5E6X1Xf?si=6Bu6r9GNQziOoHB0vDj2NQ}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/0Na0p2ZgAfOqETd5E6X1Xf?si=6Bu6r9GNQziOoHB0vDj2NQ"
+				}
+				
+				local chooseSong49 = 0
+				local songCount    = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		// 50) "Justice"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if (`dubinc' == 1 | `mellowmood' == 1) & (`france' == 1 | `italy' == 1) & `male' == 1 & `chooseSong50' == 1 {
 				
 				di  		""
 				di as txt  `""Equality will bring more peace"'
@@ -1560,7 +1710,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/6kVhMQRlKoH39wCRnkY1uc?si=PV1rLtvnT1iqaOJt8yPLhw"
 				}
 				
-				local chooseSong45 = 0
+				local chooseSong50 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1568,9 +1718,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 46) "Don't Be A Victim"
+		// 51) "Don't Be A Victim"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`dubinc' == 1 | `naâman' == 1) & `france' == 1 & `male' == 1 & `chooseSong46' == 1 {
+			if (`dubinc' == 1 | `naâman' == 1) & `france' == 1 & `male' == 1 & `chooseSong51' == 1 {
 				
 				di  		""
 				di as txt  `""I’m a rebel!"'
@@ -1590,7 +1740,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/0Nlx0VlTs6Kfgs1CAzRGMw?si=OEiNgWawTN-Y_CpqqTW7nQ"
 				}
 				
-				local chooseSong46 = 0
+				local chooseSong51 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1598,9 +1748,39 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 47) "I Am Not Afraid"
+		// 52) "Tempi d'oro"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `etana' & `jamaica' & `female' & `chooseSong47' {
+			if `duobucolico' & `italy' & `male' & `chooseSong52' {
+				
+				di  		""
+				di as txt  `" Une fois de plus la machine est lancée,"'
+				di as txt  `" Passavamo il nostro tempo ad ascoltare"'
+				di as txt  `" La musica Reggae, Bob Marley, Peter Tosh.""'
+				di as txt	" {bf:Duo Bucolico}"
+
+				if "`platform'" == "youtube" {
+				
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=WRN2-y5mxtc":https://www.youtube.com/watch?v=WRN2-y5mxtc}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=WRN2-y5mxtc"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/5nSLBWWay6jW8IW4XzmNoy?si=eg0tHHasR4aFKYv_EY9UvQ":https://open.spotify.com/track/5nSLBWWay6jW8IW4XzmNoy?si=eg0tHHasR4aFKYv_EY9UvQ}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/5nSLBWWay6jW8IW4XzmNoy?si=eg0tHHasR4aFKYv_EY9UvQ"
+				}
+				
+				local chooseSong52 = 0
+				local songCount    = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		// 53) "I Am Not Afraid"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `etana' & `jamaica' & `female' & `chooseSong53' {
 				
 				di  		""
 				di as txt  `""If dem a come let them come 'cause I am protected by the most one.""'
@@ -1618,7 +1798,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/0EhMnGX0ayyKkwBiHCzfQy?si=UCi_BqkgT1ueod7C3PAO1Q"
 				}
 				
-				local chooseSong47 = 0
+				local chooseSong53 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1626,9 +1806,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 48) "I Rise"
+		// 54) "I Rise"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `etana' & `jamaica' & `female' & `chooseSong48' {
+			if `etana' & `jamaica' & `female' & `chooseSong54' {
 								
 				di  		""
 				di as txt  `""Gonna be free like a bird in the sky"'
@@ -1648,7 +1828,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/1dPXtN41yN7Od22IV7SZ33?si=QFDqS1gjQ9iHnZFXCf_s0g"
 				}
 				
-				local chooseSong48 = 0
+				local chooseSong54 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1656,9 +1836,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 49) "Spread Love"
+		// 55) "Spread Love"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `etana' & `jamaica' & `female' & `chooseSong49' {
+			if `etana' & `jamaica' & `female' & `chooseSong55' {
 								
 				di  		""
 				di as txt  `""Spread love, spread it all over the world"'
@@ -1677,7 +1857,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/6VOeOHvMILlzAYORXJVEAS?si=jReKhVgbSgmCtTRNj5kJwA"
 				}
 				
-				local chooseSong49 = 0
+				local chooseSong55 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1685,9 +1865,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 50) "Trigger"
+		// 56) "Trigger"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `etana' & `jamaica' & `female' & `chooseSong50' {
+			if `etana' & `jamaica' & `female' & `chooseSong56' {
 								
 				di  		""
 				di as txt  `""Mamma me affi pull the trigger again.""'
@@ -1705,7 +1885,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/2nDiT97jjG7FXY6ZcwG5Cz?si=63cdk0dZS5-kB4qgbGuykg"
 				}
 				
-				local chooseSong50 = 0
+				local chooseSong56 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1713,9 +1893,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 51) "Intoxication"
+		// 57) "Intoxication"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `gentleman' & `germany' & `male' & `chooseSong51' {
+			if `gentleman' & `germany' & `male' & `chooseSong57' {
 				
 				di  		""
 				di as txt  `""Joy ina your eyes me nuh see no tears"'
@@ -1734,7 +1914,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/76GvclaeLjwJV408jF2NgZ?si=BNxknVFET96AJZLB_JG16g"
 				}
 				
-				local chooseSong51 = 0
+				local chooseSong57 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1742,9 +1922,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 
-		// 52) "Red Town"
+		// 58) "Red Town"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `gentleman' & `germany' & `male' & `chooseSong52' {
+			if `gentleman' & `germany' & `male' & `chooseSong58' {
 			
 				di  		""
 				di as txt  `""The destination is freedom from stress"'
@@ -1763,7 +1943,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/7IH9KJrlF1xteGD2nssZTp?si=sZxDUkVySYGn60S3Md3rWQ"
 				}
 				
-				local chooseSong52 = 0
+				local chooseSong58 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1771,9 +1951,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 53) "Signs Of The Times"
+		// 59) "Signs Of The Times"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`gentleman' == 1 | `kymanimarley' == 1) & (`germany' == 1 | `jamaica' == 1) & `male' == 1 & `chooseSong53' == 1 {
+			if (`gentleman' == 1 | `kymanimarley' == 1) & (`germany' == 1 | `jamaica' == 1) & `male' == 1 & `chooseSong59' == 1 {
 			
 				di  		""
 				di as txt  `""These are the signs of the times"'
@@ -1793,7 +1973,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/7kkJPjjepAoiBUiXQWXdRj?si=5xe4bqIAQsOP3wZT6f_Xow"
 				}
 				
-				local chooseSong53 = 0
+				local chooseSong59 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1801,9 +1981,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 54) "Boom Shakalak"
+		// 60) "Boom Shakalak"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `hempresssativa' & `jamaica' & `female' & `chooseSong54' {
+			if `hempresssativa' & `jamaica' & `female' & `chooseSong60' {
 			
 				di  		""
 				di as txt  `""Boom Shakalak!""'
@@ -1821,7 +2001,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/56SSNFPQklO6cOWZYqm2Mw?si=I4LXWumCQxe_RZsiOuj0KQ"
 				}
 				
-				local chooseSong54 = 0
+				local chooseSong60 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1829,9 +2009,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 55) Boom (Wah Da Da Deng)
+		// 61) Boom (Wah Da Da Deng)
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `hempresssativa' & `jamaica' & `female' & `chooseSong55' {
+			if `hempresssativa' & `jamaica' & `female' & `chooseSong61' {
 			
 				di  		""
 				di as txt  `""Hempress Sativa"'
@@ -1851,7 +2031,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4lh97cAH0qOlEcPvozgtmU?si=nmkpWEU-QdWvFccyHmVG6A"
 				}
 				
-				local chooseSong55 = 0
+				local chooseSong61 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1859,9 +2039,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 56) Rock It Ina Dance
+		// 62) Rock It Ina Dance
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `hempresssativa' & `jamaica' & `female' & `chooseSong56' {
+			if `hempresssativa' & `jamaica' & `female' & `chooseSong62' {
 			
 				di  		""
 				di as txt  `""Cause a long time wi a rock it ina dance"'
@@ -1880,7 +2060,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/6kl8xQWg0k9mAC58mfAqbT?si=mjyIyHAbQgGHosOO1DE49g"
 				}
 				
-				local chooseSong56 = 0
+				local chooseSong62 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1888,9 +2068,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 57) I Can See Clearly Now
+		// 63) I Can See Clearly Now
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `jimmycliff' & `jamaica' & `male' & `chooseSong57' {
+			if `jimmycliff' & `jamaica' & `male' & `chooseSong63' {
 			
 				di  		""
 				di as txt  `""Here is that rainbow I've been praying for"'
@@ -1910,7 +2090,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/7aJZxI6TVdIvQSuWxQ4rqp?si=dkvtBi0JSmWQlQ1QxyHQZQ"
 				}
 				
-				local chooseSong57 = 0
+				local chooseSong63 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1918,9 +2098,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 58) Reggae Night
+		// 64) Reggae Night
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `jimmycliff' & `jamaica' & `male' & `chooseSong58' {
+			if `jimmycliff' & `jamaica' & `male' & `chooseSong64' {
 				
 				di  		""
 				di as txt  `""Reggae night"'
@@ -1941,7 +2121,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/1OE5bn5HUmCqTLNpo13ya3?si=MNYyRquASJqsZfnv9YUhAA"
 				}
 				
-				local chooseSong58 = 0
+				local chooseSong64 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1949,9 +2129,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 
-		// 59) Many Rivers To Cross
+		// 65) Many Rivers To Cross
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `jimmycliff' & `jamaica' & `male' & `chooseSong59' {
+			if `jimmycliff' & `jamaica' & `male' & `chooseSong65' {
 				
 				di  		""
 				di as txt  `""Many rivers to cross and it's only my will"'
@@ -1970,7 +2150,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4hHGirIgXzCaPaTPrsR9RQ?si=yAlApkpOSJG5daqH-E03uA"
 				}
 				
-				local chooseSong59 = 0
+				local chooseSong65 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -1978,9 +2158,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 60) The Harder They Come
+		// 66) The Harder They Come
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `jimmycliff' & `jamaica' & `male' & `chooseSong60' {
+			if `jimmycliff' & `jamaica' & `male' & `chooseSong66' {
 				
 				di  		""
 				di as txt  `""So as sure as the sun will shine"'
@@ -2001,7 +2181,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/1rRwITygDIIVmidBzP6OU8?si=zRlufJB-RveR2VwfEV7mbA"
 				}
 				
-				local chooseSong60 = 0
+				local chooseSong66 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2009,9 +2189,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 61) You Can Get It If You Really Want
+		// 67) You Can Get It If You Really Want
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `jimmycliff' & `jamaica' & `male' & `chooseSong61' {
+			if `jimmycliff' & `jamaica' & `male' & `chooseSong67' {
 				
 				di  		""
 				di as txt  `""You can get it if you really want"'
@@ -2031,7 +2211,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/5WinBEkwdn2jQwm6epQR6i?si=RC-e9XIGQ4-AQYn4v-zYXw"
 				}
 				
-				local chooseSong61 = 0
+				local chooseSong67 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2039,9 +2219,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 62) Wild World
+		// 68) Wild World
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `jimmycliff' & `jamaica' & `male' & `chooseSong62' {
+			if `jimmycliff' & `jamaica' & `male' & `chooseSong68' {
 				
 				di  		""
 				di as txt  `""Oh baby, baby, it's a wild world"'
@@ -2060,7 +2240,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/24Dt3Zopsc50OE9dZ741Fg?si=-HemtivjTQOFuQuhvo_lKg"
 				}
 				
-				local chooseSong62 = 0
+				local chooseSong68 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2068,9 +2248,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 63) Wonderful World, Beautiful People
+		// 69) Wonderful World, Beautiful People
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `jimmycliff' & `jamaica' & `male' & `chooseSong63' {
+			if `jimmycliff' & `jamaica' & `male' & `chooseSong69' {
 				
 				di  		""
 				di as txt  `""We could have a wonderful world, beautiful people"'
@@ -2089,7 +2269,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/0iH2q2PiyKpSvgOCSUZq5X?si=h0YZ6z2GSa2hwAEzY7kdZA"
 				}
 				
-				local chooseSong63 = 0
+				local chooseSong69 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2097,9 +2277,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 64) "If Love So Nice"
+		// 70) "If Love So Nice"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `juniorkelly' & `jamaica' & `male' & `chooseSong64' {
+			if `juniorkelly' & `jamaica' & `male' & `chooseSong70' {
 				
 				di  		""
 				di as txt  `""Tell me if love so nice.""'
@@ -2117,7 +2297,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/5hAOJvfhTB07VcFhno9EY1?si=WvqK4YC-QVa_VnZi4KftFA"
 				}
 				
-				local chooseSong64 = 0
+				local chooseSong70 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2125,9 +2305,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 65) "Can't Breathe"
+		// 71) "Can't Breathe"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `kabakapyramid' & `jamaica' & `male' & `chooseSong65' {
+			if `kabakapyramid' & `jamaica' & `male' & `chooseSong71' {
 				
 				di  		""
 				di as txt  `""Me say me cyaan breathe"'
@@ -2147,7 +2327,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4DfCv5IfEsFeYJE87liL47?si=-WV83RsfQy29EJ-0dtTNHw"
 				}
 				
-				local chooseSong65 = 0
+				local chooseSong71 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2155,9 +2335,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 66) "Lead The Way"
+		// 72) "Lead The Way"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `kabakapyramid' & `jamaica' & `male' & `chooseSong66' {
+			if `kabakapyramid' & `jamaica' & `male' & `chooseSong72' {
 				
 				di  		""
 				di as txt  `""Selassie I lead the way.""'
@@ -2175,7 +2355,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4ziWAz5EhwFMH0Cx9LXueL?si=erSCtOj7TKaMvGDDyGiJVg"
 				}
 				
-				local chooseSong66 = 0
+				local chooseSong72 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2183,9 +2363,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 			
-		// 67) "Make Way"
+		// 73) "Make Way"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `kabakapyramid' & `jamaica' & `male' & `chooseSong67' {
+			if `kabakapyramid' & `jamaica' & `male' & `chooseSong73' {
 				
 				di  		""
 				di as txt  `""Mi go say"'
@@ -2205,7 +2385,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/0hWI17CuUzsbBG38bqdfDH?si=QcXu1ZimQr6iuvY86sp4zQ"
 				}
 				
-				local chooseSong67 = 0
+				local chooseSong73 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2213,9 +2393,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 68) "Meaning of Life"
+		// 74) "Meaning of Life"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `kabakapyramid' & `jamaica' & `male' & `chooseSong68' {
+			if `kabakapyramid' & `jamaica' & `male' & `chooseSong74' {
 		
 				di  		""
 				di as txt  `""What is the meaning of life, If you only have one chance to live"'
@@ -2234,7 +2414,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/5GiANgDhRVRgP2HDVKwMLe?si=pdaRtKJtTTOrykge8jv3Vg"
 				}
 				
-				local chooseSong68 = 0
+				local chooseSong74 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2242,9 +2422,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 69) "Mr Gunman"
+		// 75) "Mr Gunman"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `kabakapyramid' & `jamaica' & `male' & `chooseSong69' {
+			if `kabakapyramid' & `jamaica' & `male' & `chooseSong75' {
 				
 				di  		""
 				di as txt  `""Mr Gunman"'
@@ -2263,7 +2443,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/6p3r7HKvhhDoqyg8kiywbs?si=d6fvQAOMTpiFxPeUPMgXEQ"
 				}
 				
-				local chooseSong69 = 0
+				local chooseSong75 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2271,9 +2451,38 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 70) "Reggae Music"
+		// 76) "My Time"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `kabakapyramid' & `jamaica' & `male' & `chooseSong70' {
+			if `kabakapyramid' & `jamaica' & `male' & `chooseSong76' {
+		
+				di  		""
+				di as txt  `""I've been waiting patient so long"'
+				di as txt  `" Now a my time fi shine.""'
+				di as txt   " {bf:Kabaka Pyramid}"
+				
+				if "`platform'" == "youtube" {
+				
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=TVGcIUNn3dg":https://www.youtube.com/watch?v=TVGcIUNn3dg}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=TVGcIUNn3dg"
+				}
+				
+				if "`platform'" == "spotify" {
+				
+					di as text 			`"  {browse "https://open.spotify.com/track/0XBEOCvH7bO524HUYGvAdu?si=nSBjeiNnTWulCqgVYgWECw":https://open.spotify.com/track/0XBEOCvH7bO524HUYGvAdu?si=nSBjeiNnTWulCqgVYgWECw}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/0XBEOCvH7bO524HUYGvAdu?si=nSBjeiNnTWulCqgVYgWECw"
+				}
+				
+				local chooseSong76 = 0
+				local songCount    = 1 + `songCount'
+			}
+		}
+
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		// 77) "Reggae Music"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `kabakapyramid' & `jamaica' & `male' & `chooseSong77' {
 			
 				di  		""
 				di as txt  `""Well, if the music sounds sweet and the people dem a dance"'
@@ -2292,7 +2501,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4LH6TQajTVHlPz1283KHAw?si=BHToHoGTSoal5GCtAqjPvA"
 				}
 				
-				local chooseSong70 = 0
+				local chooseSong77 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2300,9 +2509,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 71) "Well Done"
+		// 78) "Well Done"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `kabakapyramid' & `jamaica' & `male' & `chooseSong71' {
+			if `kabakapyramid' & `jamaica' & `male' & `chooseSong78' {
 			
 				di  		""
 				di as txt  `""Well done, well done, Mr. Politician Man"'
@@ -2321,7 +2530,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/33Xl6nfOScCLuvgZyohurw?si=aHMtQNG7SVOuabEflJQNwA"
 				}
 				
-				local chooseSong71 = 0
+				local chooseSong78 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2329,9 +2538,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 
-		// 72) "Kontraband"
+		// 79) "Kontraband"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`kabakapyramid' == 1 | `damianmarley' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong72' == 1 {
+			if (`kabakapyramid' == 1 | `damianmarley' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong79' == 1 {
 			
 				di  		""
 				di as txt  `""Kontraband"'
@@ -2352,14 +2561,14 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4xSgbZ1CFc7f3PZd7RLwF3?si=SKWzvvlTRFSyFY0uTpk5cw"
 				}
 				
-				local chooseSong72 = 0
+				local chooseSong79 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
 		
-		// 73) "Rapture"
+		// 80) "Rapture"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `koffee' & `jamaica' & `female' & `chooseSong73' {
+			if `koffee' & `jamaica' & `female' & `chooseSong80' {
 				
 				di  		""
 				di as txt  `""Koffee come in like a rapture"'
@@ -2378,7 +2587,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/0PtDNK2Q49fAM4ZbKtN0mz?si=GL0BznfiQG2HL1VWDRKjAg"
 				}
 				
-				local chooseSong73 = 0
+				local chooseSong80 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2386,9 +2595,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 74) "Throne"
+		// 81) "Throne"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `koffee' & `jamaica' & `female' & `chooseSong74' {
+			if `koffee' & `jamaica' & `female' & `chooseSong81' {
 				
 				di  		""
 				di as txt  `""Ina mi zone"'
@@ -2408,7 +2617,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/35a521ZDkbwBkbJfWyPHEq?si=4H21fBm1T5GheyPnuHGcDg"
 				}
 				
-				local chooseSong74 = 0
+				local chooseSong81 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2416,9 +2625,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 75) "Toast"
+		// 82) "Toast"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `koffee' & `jamaica' & `female' & `chooseSong75' {
+			if `koffee' & `jamaica' & `female' & `chooseSong82' {
 				
 				di  		""
 				di as txt  `""Toast"'
@@ -2437,7 +2646,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3VEpRXloN4rbzNRPSQzZFW?si=OhM_fc17ThqJYW77Zh9Lbg"
 				}
 				
-				local chooseSong75 = 0
+				local chooseSong82 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2445,9 +2654,35 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 76) "Dance Inna Babylon"
+		// 83) "New Heights"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `mellowmood' & `italy' & `male' & `chooseSong76' {
+			if `kymanimarley' & `jamaica' & `male' & `chooseSong83' {
+				
+				di  		""
+				di as txt  `""I've been working all day and a this me a wait for"'
+				di as txt  `" Pass me the blunt and the rolling paper.""'
+				di as txt   " {bf:Ky-Mani Marley}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=rKIl5nfFASs":https://www.youtube.com/watch?v=rKIl5nfFASs}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=rKIl5nfFASs"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/09aLLGz6xaH8C86a6Fs4CO?si=0RAjBdQsQBiI5Oi2nsMUXg":https://open.spotify.com/track/09aLLGz6xaH8C86a6Fs4CO?si=0RAjBdQsQBiI5Oi2nsMUXg}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/09aLLGz6xaH8C86a6Fs4CO?si=0RAjBdQsQBiI5Oi2nsMUXg"
+				}
+				
+				local chooseSong83 = 0
+				local songCount    = 1 + `songCount'
+			}
+		}
+		
+		// 84) "Dance Inna Babylon"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `mellowmood' & `italy' & `male' & `chooseSong84' {
 				
 				di  		""
 				di as txt  `""Dance inna Babylon, until its throne a fall"'
@@ -2466,7 +2701,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3fuXNQ0yLJYgXUr3HMb3AZ?si=Jurvgn32QPCNErB3n1uXLA"
 				}
 				
-				local chooseSong76 = 0
+				local chooseSong84 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2474,9 +2709,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 77) "Sound of a War"
+		// 85) "Sound of a War"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `mellowmood' & `italy' & `male' & `chooseSong77' {
+			if `mellowmood' & `italy' & `male' & `chooseSong85' {
 				
 				di  		""
 				di as txt  `""Mister minister don't take we fi fool"'
@@ -2495,7 +2730,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/1GtJLda3q1xRy34J6lR23q?si=HFWvyeDhQrC2iGmyV3jGhg"
 				}
 				
-				local chooseSong77 = 0
+				local chooseSong85 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2503,9 +2738,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 78) "Inna Jamaica pt. 2"
+		// 86) "Inna Jamaica pt. 2"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`mellowmood' == 1 | `forelock' == 1 | `hempresssativa' == 1) & ((`italy' == 1  & `male' == 1) | (`jamaica' == 1 & `female' == 1)) & `chooseSong78' == 1 {
+			if (`mellowmood' == 1 | `forelock' == 1 | `hempresssativa' == 1) & ((`italy' == 1  & `male' == 1) | (`jamaica' == 1 & `female' == 1)) & `chooseSong86' == 1 {
 				
 				di  		""
 				di as txt  `""More time mi waan fi spend inna Jamaica"'
@@ -2524,7 +2759,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/7obN7CIn2WQqXEzXx612sk?si=ZQtsE04JSE6pPqh6wRcaTg"
 				}
 				
-				local chooseSong78 = 0
+				local chooseSong86 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2532,9 +2767,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 79) "Inna Jamaica"
+		// 87) "Inna Jamaica"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`mellowmood' == 1 | `richiecampbell' == 1) & (`italy' == 1  | `portugal' == 1) & `male' == 1 & `chooseSong79' == 1 {
+			if (`mellowmood' == 1 | `richiecampbell' == 1) & (`italy' == 1  | `portugal' == 1) & `male' == 1 & `chooseSong87' == 1 {
 				
 				di  		""
 				di as txt  `""Man affi reach di land of the sun hold a vybz in Jamaica.""'
@@ -2552,7 +2787,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/24y98VFyG8tA5Grb9hYSHn?si=2cVvU7xcTqiV2FQChE4gzw"
 				}
 				
-				local chooseSong79 = 0
+				local chooseSong87 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2560,9 +2795,156 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 80) "A Matter of Time"
+		// 88) "Andei Só"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `protoje' & `jamaica' & `male' & `chooseSong80' {
+			if `natiruts' & `brazil' & `male' & `chooseSong88' {
+								
+				di  		""
+				di as txt  `""Andei meio só pela noite"'
+				di as txt  `" Cantei um Reggae pros cachorros na rua.""'
+				di as txt   " {bf:Natiruts}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=Tu4sXwpY6S0":https://www.youtube.com/watch?v=Tu4sXwpY6S0}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=Tu4sXwpY6S0"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/2lWExLBiCX9ZDYjCWZkYPN?si=IHhr4p4lSL2H6RSwt4XPFA":https://open.spotify.com/track/2lWExLBiCX9ZDYjCWZkYPN?si=IHhr4p4lSL2H6RSwt4XPFA}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/2lWExLBiCX9ZDYjCWZkYPN?si=IHhr4p4lSL2H6RSwt4XPFA"
+				}
+				
+				local chooseSong88 = 0
+				local songCount    = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		// 89) "Liberdade Pra Dentro da Cabeça"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `natiruts' & `brazil' & `male' & `chooseSong89' {
+								
+				di  		""
+				di as txt  `""Liberdade pra dentro da cabeça.""'
+				di as txt   " {bf:Natiruts}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=xGpk-k-TK4s":https://www.youtube.com/watch?v=xGpk-k-TK4s}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=xGpk-k-TK4s"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/4oyaAgUMDBM0j8At75jOHn?si=02VoLlp9SI-nqNpJp9R41Q":https://open.spotify.com/track/4oyaAgUMDBM0j8At75jOHn?si=02VoLlp9SI-nqNpJp9R41Q}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/4oyaAgUMDBM0j8At75jOHn?si=02VoLlp9SI-nqNpJp9R41Q"
+				}
+				
+				local chooseSong89 = 0
+				local songCount    = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		// 90) "Presente de um Beija-Flor "
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `natiruts' & `brazil' & `male' & `chooseSong90' {
+							
+				di  		""
+				di as txt  `""Beija-flor que trouxe meu amor"'
+				di as txt  `" Voou e foi embora"'
+				di as txt  `" Olha só como é lindo meu amor"
+				di as txt  `" Estou feliz agora.""'
+				di as txt   " {bf:Natiruts}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=kkGDWRIe8rs":https://www.youtube.com/watch?v=kkGDWRIe8rs}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=kkGDWRIe8rs"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/2Iu5NDjHE7GEi1SGfMgyRT?si=LV1A0wtKQ_Gr8795mwHhGA":https://open.spotify.com/track/2Iu5NDjHE7GEi1SGfMgyRT?si=LV1A0wtKQ_Gr8795mwHhGA}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/2Iu5NDjHE7GEi1SGfMgyRT?si=LV1A0wtKQ_Gr8795mwHhGA"
+				}
+				
+				local chooseSong90 = 0
+				local songCount    = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		// 91) "Quero Ser Feliz Também"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `natiruts' & `brazil' & `male' & `chooseSong91' {
+								
+				di  		""
+				di as txt  `""Quero ser feliz também, navegar nas águas do teu mar"'
+				di as txt  `" Desejar para tudo que vem flores brancas, paz e Iemanjá.""'
+				di as txt   " {bf:Natiruts}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=i1Nm-MJ313w":https://www.youtube.com/watch?v=i1Nm-MJ313w}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=i1Nm-MJ313w"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/09h91oP3t1c5fSEI5P6maS?si=niEVFykoR8CDpgBhLiWKCQ":https://open.spotify.com/track/09h91oP3t1c5fSEI5P6maS?si=niEVFykoR8CDpgBhLiWKCQ}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/09h91oP3t1c5fSEI5P6maS?si=niEVFykoR8CDpgBhLiWKCQ"
+				}
+				
+				local chooseSong91 = 0
+				local songCount    = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		// 92) "Sorri, Sou Rei"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if (`natiruts' == 1 | `claudialeitte' == 1) & `brazil' == 1 & (`male' == 1 | `female' == 1) & `chooseSong92' == 1 {
+				
+				di  		""
+				di as txt  `""Quando você se foi chorei, chorei, chorei"'
+				di as txt  `" Agora que voltou sorri"'
+				di as txt  `" Sorri, sou rei.""'
+				di as txt   " {bf:Natiruts & Claudia Leitte}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=tRmtL8yxcSA":https://www.youtube.com/watch?v=tRmtL8yxcSA}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=tRmtL8yxcSA"
+				}
+				
+				if "`platform'" == "spotify" {
+				
+					di as text 			`"  {browse "https://open.spotify.com/track/5lKHrBigpyKZM6uMvbOGh2?si=zLV1-Lp-QhqOLM-YO_u6fA":https://open.spotify.com/track/5lKHrBigpyKZM6uMvbOGh2?si=zLV1-Lp-QhqOLM-YO_u6fA}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/5lKHrBigpyKZM6uMvbOGh2?si=zLV1-Lp-QhqOLM-YO_u6fA"
+				}
+				
+				local chooseSong92 = 0
+				local songCount    = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		// 93) "A Matter of Time"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `protoje' & `jamaica' & `male' & `chooseSong93' {
 				
 				di  		""
 				di as txt  `""And I got to get what's mine"'
@@ -2581,7 +2963,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/62yLFzTjO2shNlxoIiMQrb?si=xLVx9foZRfCSZI13bSfozA"
 				}
 				
-				local chooseSong80 = 0
+				local chooseSong93 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2589,9 +2971,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 
-		// 81) "All Will Have To Change"
+		// 94) "All Will Have To Change"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `protoje' & `jamaica' & `male' & `chooseSong81' {
+			if `protoje' & `jamaica' & `male' & `chooseSong94' {
 
 				di  		""
 				di as txt  `""I say we all will have to change"'
@@ -2610,7 +2992,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/1UwY88aleBy0U4NAwqF8JG?si=_x_Zd-KsS-6-DpWdaLcPqg"
 				}
 				
-				local chooseSong81 = 0
+				local chooseSong94 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2618,9 +3000,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 
-		// 82) "Blood Money"
+		// 95) "Blood Money"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `protoje' & `jamaica' & `male' & `chooseSong82' {
+			if `protoje' & `jamaica' & `male' & `chooseSong95' {
 
 				di  		""
 				di as txt  `""If what you see no really phase you"'
@@ -2639,7 +3021,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3WzNtP1VFi5QYoO3io6Ybl?si=5HQtwUoySJaIdmLz2Guwmw"
 				}
 				
-				local chooseSong82 = 0
+				local chooseSong95 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2647,9 +3029,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 83) "Criminal"
+		// 96) "Criminal"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `protoje' & `jamaica' & `male' & `chooseSong83' {
+			if `protoje' & `jamaica' & `male' & `chooseSong96' {
 
 				di  		""
 				di as txt  `""Them a criminal watch it them a criminal"'
@@ -2668,7 +3050,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/29yLT78oDQ25d9vfewcUIc?si=nmdjK-jpQFa-GKFOnnrzTQ"
 				}
 				
-				local chooseSong83 = 0
+				local chooseSong96 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2676,9 +3058,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 84) "I&I"
+		// 97) "I&I"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `protoje' & `jamaica' & `male' & `chooseSong84' {
+			if `protoje' & `jamaica' & `male' & `chooseSong97' {
 				
 				di  		""
 				di as txt  `""Ites I a gwaan hold"'
@@ -2699,7 +3081,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4w6V1r193RxPSaJQRbESEN?si=5Vp7HPSYRWi4a0c97qHOGQ"
 				}
 				
-				local chooseSong84 = 0
+				local chooseSong97 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2707,9 +3089,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 85) "Kingston Be Wise"
+		// 98) "Kingston Be Wise"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `protoje' & `jamaica' & `male' & `chooseSong85' {
+			if `protoje' & `jamaica' & `male' & `chooseSong98' {
 
 				di  		""
 				di as txt  `""Kingston, be wise"'
@@ -2728,7 +3110,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/0qbouIdcN4lrj49jem7TEz?si=eYeXCU4gTsi_V64WxikFjw"
 				}
 				
-				local chooseSong85 = 0
+				local chooseSong98 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2736,9 +3118,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 
-		// 86) "Like This"
+		// 99) "Like This"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `protoje' & `jamaica' & `male' & `chooseSong86' {
+			if `protoje' & `jamaica' & `male' & `chooseSong99' {
 
 				di  		""
 				di as txt  `""I’ma do my thing like this"'
@@ -2757,7 +3139,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/40Y6wU9MHPSCTFs5QoO23X?si=kvLwWqh2Q6S4sME9gFFsKA"
 				}
 				
-				local chooseSong86 = 0
+				local chooseSong99 = 0
 				local songCount    = 1 + `songCount'
 			}
 		}
@@ -2765,9 +3147,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 87) "Mind of a King"
+		// 100) "Mind of a King"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `protoje' & `jamaica' & `male' & `chooseSong87' {
+			if `protoje' & `jamaica' & `male' & `chooseSong100' {
 
 				di  		""
 				di as txt  `""Every country, every town"'
@@ -2786,17 +3168,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3vor1l4dID6poAHLvsTLp3?si=BJE4qrdtTHu2bxcnPMOzIg"
 				}
 				
-				local chooseSong87 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong100 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 		
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 88) "No Guarantee"
+		// 101) "No Guarantee"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if ((`protoje' == 1) | (`chronixx' == 1)) & `jamaica' == 1 & `male' == 1 & `chooseSong88' == 1 {
+			if ((`protoje' == 1) | (`chronixx' == 1)) & `jamaica' == 1 & `male' == 1 & `chooseSong101' == 1 {
 				
 				di  		""
 				di as txt  `""No matter what them a go say, me haffi live me life"'
@@ -2815,17 +3197,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4YVRnPf2I5FXyY8hsHP019?si=Yik923oNSkKmmmXKZUQCyw"
 				}
 				
-				local chooseSong88 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong101 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 			
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 89) "Who Knows"
+		// 102) "Who Knows"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if ((`protoje' == 1) | (`chronixx' == 1)) & `jamaica' == 1 & `male' == 1 & `chooseSong89' == 1 {
+			if ((`protoje' == 1) | (`chronixx' == 1)) & `jamaica' == 1 & `male' == 1 & `chooseSong102' == 1 {
 				
 				di  		""
 				di as txt  `""I'm pleased to be chilling in the West Indies"'
@@ -2844,17 +3226,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/2WPurGHHJunuAkFCczyEe3?si=HtVvBAzQRgq82VgAKSCa8g"
 				}
 				
-				local chooseSong89 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong102 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 			
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'		
 		
-		// 90) "The Flame"
+		// 103) "The Flame"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if ((`protoje' == 1) | (`kabakapyramid' == 1)) & `jamaica' == 1 & `male' == 1 & `chooseSong90' == 1 {
+			if ((`protoje' == 1) | (`kabakapyramid' == 1)) & `jamaica' == 1 & `male' == 1 & `chooseSong103' == 1 {
 				
 				di  		""
 				di as txt  `""Forever the same"'
@@ -2873,17 +3255,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/0JxiVVApeEgVqvzUQ5sURe?si=d9KEP-l0TPmvWpTqsly2Fw"
 				}
 				
-				local chooseSong90 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong103 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 			
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'	
 		
-		// 91) "Rasta Love"
+		// 104) "Rasta Love"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if ((`protoje' == 1) | (`kymanimarley' == 1)) & `jamaica' == 1 & `male' == 1 & `chooseSong91' == 1 {
+			if ((`protoje' == 1) | (`kymanimarley' == 1)) & `jamaica' == 1 & `male' == 1 & `chooseSong104' == 1 {
 				
 				di  		""
 				di as txt  `""She didnt know how"'
@@ -2903,17 +3285,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/0cSkIGgh1uICEIcmEb1niw?si=0hTLNAnGS76Moo6bFb3Juw"
 				}
 				
-				local chooseSong91 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong104 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 			
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 92) "Protection"
+		// 105) "Protection"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if ((`protoje' == 1) | (`mortimer' == 1)) & `jamaica' == 1 & `male' == 1 & `chooseSong92' == 1 {
+			if ((`protoje' == 1) | (`mortimer' == 1)) & `jamaica' == 1 & `male' == 1 & `chooseSong105' == 1 {
 				
 				di  		""
 				di as txt  `""Cause out here in this jungle we roar"'
@@ -2932,17 +3314,47 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/5UgbG3huDFp8AWzSYpIqaY?si=-AQPb8huQ1mTGUKpzGZZMw"
 				}
 				
-				local chooseSong92 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong105 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 			
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 93) "Beautiful Life"
+		// 106) "Truths & Rights"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if ((`richiespice' == 1) | (`kathrynaria' == 1)) & ((`jamaica' == 1  & `male' == 1) | (`canada' == 1 & `female' == 1)) & `chooseSong93' == 1 {
+			if ((`protoje' == 1) | (`mortimer' == 1)) & `jamaica' == 1 & `male' == 1 & `chooseSong106' == 1 {
+				
+				di  		""
+				di as txt  `""Cah jah jah bless I with the brightest light"'
+				di as txt  `" An I a shine it pon di yout dem plight"'
+				di as txt  `" Oh we deh ya so fi truths an rights.""'
+				di as txt   " {bf:Protoje & Mortimer}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=n8j7vojNYco":https://www.youtube.com/watch?v=n8j7vojNYco}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=n8j7vojNYco"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/3l8jrocAE9zn2W7CAz0on9?si=gZ8iHKIgQaOxvhk98lDXWQ":https://open.spotify.com/track/3l8jrocAE9zn2W7CAz0on9?si=gZ8iHKIgQaOxvhk98lDXWQ}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/3l8jrocAE9zn2W7CAz0on9?si=gZ8iHKIgQaOxvhk98lDXWQ"
+				}
+				
+				local chooseSong106 = 0
+				local songCount     = 1 + `songCount'
+			}
+		}
+			
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		// 107) "Beautiful Life"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if ((`richiespice' == 1) | (`kathrynaria' == 1)) & ((`jamaica' == 1  & `male' == 1) | (`canada' == 1 & `female' == 1)) & `chooseSong107' == 1 {
 				
 				di  		""
 				di as txt  `""It’s a beautiful life"'
@@ -2961,17 +3373,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/0PZWdXle8jfsWBpWT98PeQ?si=uyAnG7EJSrCZhrPenTxjyg"
 				}
 				
-				local chooseSong93 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong107 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 			
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 94) "Black & White"
-		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `saralugo' & `germany' & `female' & `chooseSong94' {
+		// 108) "Black & White"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax'  {
+			if `saralugo' & `germany' & `female' & `chooseSong108' {
 
 				di  		""
 				di as txt  `""I'm not black and I'm not white"'
@@ -2991,17 +3403,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/2mRYXkOe3Z9LmGJZbn6Axo?si=H3WSu8CBTKK-ACJc077JWw"
 				}
 				
-				local chooseSong94 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong108 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 		
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 95) "Play With Fire"
-		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `saralugo' & `germany' & `female' & `chooseSong95' {
+		// 109) "Play With Fire"
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax'  {
+			if `saralugo' & `germany' & `female' & `chooseSong109' {
 
 				di  		""
 				di as txt  `""Well if you play with fire you will get burnt.""'
@@ -3019,17 +3431,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/5dLXutiPFJ7hxc2u3uPOjp?si=Gse_7z3CQlqi4jBmALp9tA"
 				}
 				
-				local chooseSong95 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong109 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 		
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 96) "High & Windy"
+		// 110) "High & Windy"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`kabakapyramid' == 1 | `saralugo' == 1) & ((`jamaica' == 1  & `male' == 1) | (`germany' == 1 & `female' == 1)) & `chooseSong96' == 1 {
+			if (`kabakapyramid' == 1 | `saralugo' == 1) & ((`jamaica' == 1  & `male' == 1) | (`germany' == 1 & `female' == 1)) & `chooseSong110' == 1 {
 			
 				di  		""
 				di as txt  `""Riding on a high and windy day"'
@@ -3048,17 +3460,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/0E1HHOAk52Z5STOKrUmBhR?si=ErZazDuITPiiVZu5keORTQ"
 				}
 				
-				local chooseSong96 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong110 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 		
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 97) "Really Like You"
+		// 111) "Really Like You"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`saralugo' == 1 | `protoje' == 1) & ((`jamaica' == 1  & `male' == 1) | (`germany' == 1 & `female' == 1)) & `chooseSong97' == 1 {
+			if (`saralugo' == 1 | `protoje' == 1) & ((`jamaica' == 1  & `male' == 1) | (`germany' == 1 & `female' == 1)) & `chooseSong111' == 1 {
 				
 				di  		""
 				di as txt  `""Cos I really really like you"'
@@ -3078,17 +3490,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/21HsvKIyvp2HtVIqg4LHQH?si=wZxN3WEtQtCxMd6cEFQYWw"
 				}
 				
-				local chooseSong97 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong111 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 		
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 98) "Really Like You"
+		// 112) "Really Like You"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`saralugo' == 1 | `randyvalentine' == 1) & ((`jamaica' == 1  & `male' == 1) | (`germany' == 1 & `female' == 1)) & `chooseSong98' == 1 {
+			if (`saralugo' == 1 | `randyvalentine' == 1) & ((`jamaica' == 1  & `male' == 1) | (`germany' == 1 & `female' == 1)) & `chooseSong112' == 1 {
 				
 				di  		""
 				di as txt  `""In my living room, I'm growing a jungle"'
@@ -3107,17 +3519,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3APqC16VGdbo1Z9vwzdDUr?si=baLOG0C8SHuMLCk2TT47lA"
 				}
 				
-				local chooseSong98 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong112 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 		
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 99) "Le Radici Ca Tieni"
+		// 113) "Le Radici Ca Tieni"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `sudsoundsystem' & `italy' & `male' & `chooseSong99' {
+			if `sudsoundsystem' & `italy' & `male' & `chooseSong113' {
 
 				di  		""
 				di as txt  `""Se nu te scierri mai de le radici ca tieni"'
@@ -3138,17 +3550,17 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4oVjEZ8WwGt67ZhoNchF1q?si=BQePs4NEQGSoPrkG0EyK7w"
 				}
 				
-				local chooseSong99 = 0
-				local songCount    = 1 + `songCount'
+				local chooseSong113 = 0
+				local songCount     = 1 + `songCount'
 			}
 		}
 		
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 100) "Sciamu A Ballare"
+		// 114) "Sciamu A Ballare"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `sudsoundsystem' & `italy' & `male' & `chooseSong100' {
+			if `sudsoundsystem' & `italy' & `male' & `chooseSong114' {
 
 				di  		""
 				di as txt  `""Fatte beddrha pe sta sira cè na festa"'
@@ -3167,7 +3579,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/0zzZJCmaDU6IHubleLEAUQ?si=NQMGaErUR4epUUuRQoflfw"
 				}
 				
-				local chooseSong100 = 0
+				local chooseSong114 = 0
 				local songCount     = 1 + `songCount'
 			}
 		}
@@ -3175,9 +3587,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 101) "She's Royal"
+		// 115) "She's Royal"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `tarrusriley' & `jamaica' & `male' & `chooseSong101' {
+			if `tarrusriley' & `jamaica' & `male' & `chooseSong115' {
 
 				di  		""
 				di as txt  `""And she's royal, yeah so royal""'
@@ -3195,7 +3607,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/6dFOwtd9iBMERardJvsIxY?si=Vx3a5SjPRniDp4wTiIdSxQ"
 				}
 				
-				local chooseSong101 = 0
+				local chooseSong115 = 0
 				local songCount     = 1 + `songCount'
 			}
 		}
@@ -3203,9 +3615,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 102) "Sorry Is A Sorry Word"
+		// 116) "Sorry Is A Sorry Word"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `tarrusriley' & `jamaica' & `male' & `chooseSong102' {
+			if `tarrusriley' & `jamaica' & `male' & `chooseSong116' {
 
 				di  		""
 				di as txt  `""I'm sorry that you're sorry but sorry's not good enough for me baby"'
@@ -3224,7 +3636,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/05Z4eQ7llqucxW1BMeGOVR?si=2QmwvDQiRxiB7Elf0Xm81g"
 				}
 				
-				local chooseSong102 = 0
+				local chooseSong116 = 0
 				local songCount     = 1 + `songCount'
 			}
 		}
@@ -3232,9 +3644,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 103) "Superman"
+		// 117) "Superman"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `tarrusriley' & `jamaica' & `male' & `chooseSong103' {
+			if `tarrusriley' & `jamaica' & `male' & `chooseSong117' {
 
 				di  		""
 				di as txt  `""I will be there when you need someone to tell you"'
@@ -3253,7 +3665,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/4E6TkulZSnor5RzOkkW32U?si=owXJJ8VkQii9h604kyZ7Hg"
 				}
 				
-				local chooseSong103 = 0
+				local chooseSong117 = 0
 				local songCount     = 1 + `songCount'
 			}
 		}
@@ -3261,9 +3673,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 104) "Gente do Sud"
+		// 118) "Gente do Sud"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `terroniuniti' & `italy' & `male' & `chooseSong104' {
+			if `terroniuniti' & `italy' & `male' & `chooseSong118' {
 				
 				di  		""
 				di as txt  `""Gente d''o sud"'
@@ -3283,7 +3695,7 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/3aehno2i6NeUbu6p9ewOog?si=AucDJRDdQYCM2uOleIQShA"
 				}
 				
-				local chooseSong104 = 0
+				local chooseSong118 = 0
 				local songCount     = 1 + `songCount'
 			}
 		}
@@ -3291,9 +3703,9 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
-		// 105) Dawn of Time
+		// 119) Dawn of Time
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if `tribalseeds' & `unitedstates' & `male' & `chooseSong105' {
+			if `tribalseeds' & `unitedstates' & `male' & `chooseSong119' {
 				
 				di  		""
 				di as txt  `""Virtuous girl"'
@@ -3313,13 +3725,101 @@ cap prog drop REGgae_music
 					if "`browse'" != "" view browse "https://open.spotify.com/track/445qQk3nyQwmjf4vzDghKd?si=z9D4rlaKR4SIYT6pjcttuw"
 				}
 				
-				local chooseSong105 = 0
+				local chooseSong119 = 0
 				local songCount     = 1 + `songCount'
 			}
 		}
 		
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
+		
+		// 120) Moonlight
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `tribalseeds' & `unitedstates' & `male' & `chooseSong120' {
+				
+				di  		""
+				di as txt  `""We're jamming in the moonlight"'
+				di as txt  `" Hear the sound waves by the seaside"'
+				di as txt  `" We don't need to play for anyone.""'
+				di as txt   " {bf:Tribal Seeds}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=cq_zQ3lPKDk":https://www.youtube.com/watch?v=cq_zQ3lPKDk}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=cq_zQ3lPKDk"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/5G8xknglIO3jFYIXS34YB2?si=i4ZkECqdSta1nQeZjfgePg":https://open.spotify.com/track/5G8xknglIO3jFYIXS34YB2?si=i4ZkECqdSta1nQeZjfgePg}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/5G8xknglIO3jFYIXS34YB2?si=i4ZkECqdSta1nQeZjfgePg"
+				}
+				
+				local chooseSong120 = 0
+				local songCount     = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		// 121) Rasta Refuse It
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `tribalseeds' & `unitedstates' & `male' & `chooseSong121' {
+				
+				di  		""
+				di as txt  `""What Babylon try to offer, rasta refuse it.""'
+				di as txt   " {bf:Tribal Seeds}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=YejW4Tm2KK0":https://www.youtube.com/watch?v=YejW4Tm2KK0}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=YejW4Tm2KK0"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/1T6FRo7wf886jV2iq0remh?si=vrJGPzdmSNqrsWt61siAIg":https://open.spotify.com/track/1T6FRo7wf886jV2iq0remh?si=vrJGPzdmSNqrsWt61siAIg}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/1T6FRo7wf886jV2iq0remh?si=vrJGPzdmSNqrsWt61siAIg"
+				}
+				
+				local chooseSong121 = 0
+				local songCount     = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		// 122) Love Is My Religion
+		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `ziggymarley' & `jamaica' & `male' & `chooseSong122' {
+				
+				di  		""
+				di as txt  `""Love is my religion"'
+				di as txt  `" I'll take you to the temple tonight.""'
+				di as txt   " {bf:Ziggy Marley}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=r-eXYJnV3V4":https://www.youtube.com/watch?v=r-eXYJnV3V4}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=r-eXYJnV3V4"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/3NmRPLkEx1EL7LHAe3OZVr?si=uLMdqpLcRmiZ8E5CuAQkug":https://open.spotify.com/track/3NmRPLkEx1EL7LHAe3OZVr?si=uLMdqpLcRmiZ8E5CuAQkug}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/3NmRPLkEx1EL7LHAe3OZVr?si=uLMdqpLcRmiZ8E5CuAQkug"
+				}
+				
+				local chooseSong122 = 0
+				local songCount     = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
 	}
 	
 // End
