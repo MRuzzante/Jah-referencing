@@ -30,8 +30,8 @@ Help for {hi:REGgae_music} version 0.1
 {synopt:{opt  platfrom(string)}}Specify  music platform ({it:YouTube} or {it:Spotify}); default is {it:Youtube}.{p_end}
 {break}
 {it:    Music Options}
-{synopt:{opt  artist(string)}}Specify artist.{p_end}
-{synopt:{opt  country(string)}}Specify country of origin.{p_end}
+{synopt:{opt  artist(string)}}Specify artist name (see list below).{p_end}
+{synopt:{opt  country(string)}}Specify artist country of origin (see list below).{p_end}
 {synopt:{opt  sex(string)}}Specify artist sex ({it:male} or {it:female}).{p_end}
 {synoptline}
 {p 4 6 2}{p_end}
