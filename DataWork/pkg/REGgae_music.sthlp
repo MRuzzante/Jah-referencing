@@ -88,13 +88,14 @@ song for you. And now, enjoy the tune!
 {title:List of Artists and Countries}
 
 {text}{p 2} The current version of the package contains songs from: 99 Posse,
-Alborosie, Anthony B, Bob Marley & The Wailers, Chronixx, Collie Buddz, Damian
-Marley, Diplomatico e il Collettivo Ninco Nanco, Dub Inc, Etana, Forelock,
-Gentleman, Hempress Sativa, Jah Cure, Jimmy Cliff, Junior Kelly, Kabaka Pyramid,
-Kathryn Aria, Ky-Mani Marley, Koffee, Mama Marjas, Mellow Mood, Mortimer,
-Naâman, Nas, Protoje, Raging Fyah, Randy Valentine, Richie Campbell, Richie
-Spice, Rita Marley, Sara Lugo, Stephen Marley, Sud Sound System, Tarrus Riley,
-Terroni Uniti, and Tribal Seeds.{p_end}
+Alborosie, Anthony B, Bob Marley & The Wailers, Busy Signal, Chronixx,
+Collie Buddz, Damian Marley, Diplomatico e il Collettivo Ninco Nanco, Dub Inc,
+Etana, Forelock, Gentleman, Hempress Sativa, Jah Cure, Jimmy Cliff, Junior
+Kelly, Kabaka Pyramid, Kathryn Aria, Ky-Mani Marley, Koffee, Mama Marjas,
+Mellow Mood, Morgan Heritage, Mortimer, Naâman, Nas, Protoje, Queen Ifrica,
+Raging Fyah, Randy Valentine, RC, Richie Campbell, Richie Spice, Rita Marley,
+Sara Lugo, SOJA, Stephen Marley, Sud Sound System, Tarrus Riley, Terroni Uniti,
+and Tribal Seeds.{p_end}
 
 {text}{p 2} Countries available in the playlists are Brazil, Canada, France,
 Germany, Italy, Portugal, United States, and, indeed, di motherland island
@@ -122,7 +123,6 @@ provided valuable comments and feedback.{p_end}
 Submit bugs and feature requests {browse "https://github.com/MRuzzante/Jah-referencing/issues":here}.
 The full playlist is available here ({browse "https://www.youtube.com/playlist?list=PLC-aST3UH2m5tfv3RALnUA-z753ZDYSm7&disable_polymer=true":Youtube})
 and here ({browse "https://open.spotify.com/user/ruzzante.matteo/playlist/100XebrUHtUthBEoaKo0Ge?si=d592jMbFRl2EDf9w0QlPLA":Spotify}).
-Feel free to suggest any song or artist, which is missing in our current
-selection, and a committee chaired by Jonas C. Guthoff will decide upon the
-inclusion.{p_end}
+Feel free to suggest any song, artist, or country, which is missing in our
+current selection, and we will try to expand the choices for you.{p_end}
 

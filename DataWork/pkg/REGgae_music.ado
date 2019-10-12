@@ -1,4 +1,4 @@
-*! version 0.1 5AUG2019 Matteo Ruzzante ruzzante.matteo@gmail.com
+*! version 0.1 12OCT2019 Matteo Ruzzante ruzzante.matteo@gmail.com
 
 // Reggae music random generator
 
@@ -99,14 +99,14 @@ cap prog drop REGgae_music
 	
 	// If 'number' option is not used, we display one song
 	if 	 "`number'" == "" local number = 1
-	
+		
 	// List artists available in the package
 	#d	;
 		local  artistList
 		
 			   99posse
 			   alborosie anthonyb
-			   bobmarley
+			   bobmarley busysignal
 			   chronixx claudialeitte colliebuddz
 			   damianmarley diplomatico dubinc duobucolico
 			   etana
@@ -119,7 +119,7 @@ cap prog drop REGgae_music
 			   naâman nas natiruts
 			   protoje
 			   queenifrica
-			   ragingfyah randyvalentine richiecampbell richiespice ritamarley romainvirgo
+			   ragingfyah randyvalentine rc richiecampbell richiespice ritamarley romainvirgo
 			   saralugo sizzla soja stephenmarley sudsoundsystem
 			   tarrusriley terroniuniti thewailers tribalseeds
 			   ziggymarley
@@ -144,15 +144,15 @@ cap prog drop REGgae_music
 			local artistIfList `" `artistIfList' "`artist'" != "`artistName'" & "'
 		}
 		
-		if "`artistIfList'" ("rasta" == "rasta") {
+		if `artistIfList' ("rasta" == "rasta") {
 			 
 				 noi di as error "The {bf:artist} you selected is not present in our playlist."
-				 noi di as error "If he/she is a reggae artist you like, feel free to suggest it by opening an issue in:""
-				 noi di as error `" {browse "https://github.com/MRuzzante/Jah-referencing/issues":https://github.com/MRuzzante/Jah-referencing/issues}
+				 noi di as error "If he/she is a reggae artist you like, feel free to suggest it by opening an issue in:"
+				 noi di as error `" {browse "https://github.com/MRuzzante/Jah-referencing/issues":https://github.com/MRuzzante/Jah-referencing/issues} "'
 						   exit
 		}
 	}
-		
+	
 	// If 'artist' option is used, we switch artist locals on
 	if	 "`artist'"	   != "" {
 		
@@ -164,8 +164,8 @@ cap prog drop REGgae_music
 			// Turn local to 1 if the name matches
 			if "`artist'" == "`artistName'" local `artistName' = 1
 		}		
-	}
-		
+	} 
+	
 	// If 'artist' option is not used, we switch all artist locals on
 	if	 "`artist'"	   == "" {
 		
@@ -246,7 +246,7 @@ cap prog drop REGgae_music
 	
 	
 	// Initialize song counter
-	local  totalSong  = 122
+	local  totalSong  = 127
 	local  songCount  =   0
 	
 	// If the number of songs chosen is larger than the total, we print an error
@@ -1086,7 +1086,7 @@ cap prog drop REGgae_music
 		
 		// 29) "Iron Lion Zion"
 		if `randomSong' > `rangeMin' & `randomSong' <= `rangeMax' {
-			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong38' == 1 {
+			if (`bobmarley' == 1 | `thewailers' == 1) & `jamaica' == 1 & `male' == 1 & `chooseSong29' == 1 {
 				
 				di  		""
 				di as txt  `""I had to run like a fugitive just to save the life I live"'
@@ -1604,7 +1604,7 @@ cap prog drop REGgae_music
 				
 				di  		""
 				di as txt  `""Même couleur dans nos mains malgré notre épiderme,"'
-				di as txt  `""Les consonnes peuvent se lire s’il y a des voyelles,"'
+				di as txt  `" Les consonnes peuvent se lire s’il y a des voyelles,"'
 				di as txt  `" Le futur de nos vies se conjugue au pluriel.""'
 				di as txt	" {bf:Dub Inc}"
 
@@ -3820,6 +3820,149 @@ cap prog drop REGgae_music
 		local rangeMin	= `rangeMin' + `interval'
 		local rangeMax	= `rangeMax' + `interval'
 		
+		// Bonus tracks
+		// ------------
+		
+		// 123) "Beach and Country"
+		if `randomSong'  > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `morganheritage' & `jamaica' & `male' & `chooseSong123' {
+			
+				di  		""
+				di as txt  `""Now tell me where can you find this vibe all the time only.""'
+				di as txt   " {bf:Morgan Heritage}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=_n68lXBeKG0":https://www.youtube.com/watch?v=_n68lXBeKG0}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=_n68lXBeKG0"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/6GcSetw1kC8VCxbXJ3lG6i?si=vn2tRQQ0SVe2Uzv6I-fVgg":https://open.spotify.com/track/6GcSetw1kC8VCxbXJ3lG6i?si=vn2tRQQ0SVe2Uzv6I-fVgg}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/6GcSetw1kC8VCxbXJ3lG6i?si=vn2tRQQ0SVe2Uzv6I-fVgg"
+				}
+				
+				local chooseSong123 = 0
+				local songCount     = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		//124) "Dreams Of Brighter Days"
+		if `randomSong'  > `rangeMin' & `randomSong' <= `rangeMax' {
+			if ((`busysignal' == 1) | (`rc' == 1)) & `jamaica' == 1 & `male' == 1 & `chooseSong124' == 1 {
+			
+				di  		""
+				di as txt  `""Dreams of brighter days ..."'
+				di as txt  `" Highest grades we blaze.""'
+				di as txt   " {bf:Busy Signal & RC}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=dU09pwNot9c":https://www.youtube.com/watch?v=dU09pwNot9c}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=dU09pwNot9c"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/1Fo1kCjIFWcy6uyr2btG3R?si=ToM7QixcQ9eFBv_GNMPzDg":https://open.spotify.com/track/1Fo1kCjIFWcy6uyr2btG3R?si=ToM7QixcQ9eFBv_GNMPzDg}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/1Fo1kCjIFWcy6uyr2btG3R?si=ToM7QixcQ9eFBv_GNMPzDg"
+				}
+				
+				local chooseSong124 = 0
+				local songCount     = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		//125) "To Serve And Protect"
+		if `randomSong'  > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `queenifrica' & `jamaica' & `female' & `chooseSong125' {
+			
+				di  		""
+				di as txt  `""We need somebody fi defend the poor.""'
+				di as txt   " {bf:Queen Ifrica}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=R_3vZA3g4G8":https://www.youtube.com/watch?v=R_3vZA3g4G8}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=R_3vZA3g4G8"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/6JPmyr2qSrgE6TgtSA48Dc?si=cSXI4VrES3O4n4AqZHBz9w":https://open.spotify.com/track/6JPmyr2qSrgE6TgtSA48Dc?si=cSXI4VrES3O4n4AqZHBz9w}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/6JPmyr2qSrgE6TgtSA48Dc?si=cSXI4VrES3O4n4AqZHBz9w"
+				}
+				
+				local chooseSong125 = 0
+				local songCount     = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		//126) "Rest Of My File"
+		if `randomSong'  > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `soja' & `unitedstates' & `female' & `chooseSong126' {
+			
+				di  		""
+				di as txt  `""If I could spend the rest of my life with my people,"'
+				di as txt  `" I would do it over and over again.""'
+				di as txt   " {bf:SOJA}"
+				
+				if "`platform'" == "youtube" {
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=X572Mp_r46E":https://www.youtube.com/watch?v=X572Mp_r46E}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=X572Mp_r46E"
+				}
+				
+				if "`platform'" == "spotify" {
+					
+					di as text 			`"  {browse "https://open.spotify.com/track/7aP6GXrxvq0836pzL4kHK8?si=MzRFjndCSuO4fWIJummKug":https://open.spotify.com/track/7aP6GXrxvq0836pzL4kHK8?si=MzRFjndCSuO4fWIJummKug}
+					if "`browse'" != "" view browse "https://open.spotify.com/track/7aP6GXrxvq0836pzL4kHK8?si=MzRFjndCSuO4fWIJummKug"
+				}
+				
+				local chooseSong126 = 0
+				local songCount     = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
+		
+		//127) "When We Were Younger
+		if `randomSong'  > `rangeMin' & `randomSong' <= `rangeMax' {
+			if `soja' & `unitedstates' & `female' & `chooseSong127' {
+			
+				if "`platform'" == "youtube" {
+				
+					di  		""
+					di as txt  `""When I was younger,"'
+					di as txt  `" had the answers, I've got to say"'
+					di as txt  `" but all of my answers, now that I'm older"'
+					di as txt  `" turned into questions, in front of me.""'
+					di as txt   " {bf:SOJA}"				
+					
+					di as text 			`"  {browse "https://www.youtube.com/watch?v=td2Kv4ZbJWs":https://www.youtube.com/watch?v=td2Kv4ZbJWs}
+					if "`browse'" != "" view browse "https://www.youtube.com/watch?v=td2Kv4ZbJWs"
+				}
+				
+				if "`platform'" == "spotify" continue
+				
+				local chooseSong127 = 0
+				local songCount     = 1 + `songCount'
+			}
+		}
+		
+		local rangeMin	= `rangeMin' + `interval'
+		local rangeMax	= `rangeMax' + `interval'
 	}
 	
 // End
